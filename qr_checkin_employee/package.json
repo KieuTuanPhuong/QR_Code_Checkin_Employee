@@ -12,6 +12,8 @@
     "react": "^18.2.0",
     "react-calendar": "^4.7.0",
     "react-dom": "^18.2.0",
+    "react-native-big-calendar": "^4.9.0",
+    "react-native-web": "^0.19.10",
     "react-qr-scanner": "^1.0.0-alpha.11",
     "react-router-dom": "^6.21.1",
     "react-scripts": "5.0.1",

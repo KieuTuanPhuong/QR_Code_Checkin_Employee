@@ -4,7 +4,6 @@ import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 
 import './Login.css';
-import useAuth from '../../hooks/useAuth';
 
 const Login = () => {
     const [credentials, setCredentials] = useState({
@@ -30,6 +29,7 @@ const Login = () => {
                 credentials,
                 { withCredentials: true }
             );
+            debugger;
             console.log(res);
             if (res?.data?.details?.name) {
                 dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });

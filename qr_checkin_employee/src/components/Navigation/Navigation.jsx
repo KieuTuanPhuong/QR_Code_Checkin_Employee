@@ -6,7 +6,7 @@ const Navigation = () => {
         <div className="container mt-3">
             <ul className="nav nav-underline nav-justified">
                 <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" href="/">Home</a>
+                    <a className="nav-link" href="/">Home</a>
                 </li>
                 <li className="nav-item">
                     <a className="nav-link" href="check-in">Check in</a>
