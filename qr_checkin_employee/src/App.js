@@ -11,7 +11,7 @@ import ScanQR from "./components/ScanQR/ScanQR";
 import ScheduleTable from "./views/Calendar/ScheduleTable";
 import Attendance from "./views/Attendance/Attendance";
 import EmployeeForm from "./views/EmployeeForm/EmployeeForm";
-import Schedule from "./views/NewCalendar/Schedule";
+import VacationRequest from "./views/VacationRequest/VacationRequest";
 
 function App() {
 
@@ -23,7 +23,7 @@ function App() {
       <Route path="schedule" element={ <ScheduleTable /> }/>
       <Route path="attendance-history" element={ <Attendance /> }/>
       <Route path="employee-form" element={ <EmployeeForm /> }/>
-      <Route path="calendar" element={ <Schedule /> }/>
+      <Route path="vacation-request" element={ <VacationRequest /> }/>
     </Routes>
   );
 }

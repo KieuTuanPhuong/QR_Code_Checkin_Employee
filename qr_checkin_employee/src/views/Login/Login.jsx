@@ -1,5 +1,5 @@
-import { useRef, userRef, useState, useEffect, useContext } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 
@@ -13,31 +13,32 @@ const Login = () => {
     
     const { loading, error, dispatch } = useContext(AuthContext);
     
+    const [isLoading, setIsLoading] = useState(false);
+    
     const navigate = useNavigate();
     
     const handleChange = (e) => {
-        console.log(e);
         setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
     };
     
     const handleLogin = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         dispatch({ type: "LOGIN_START" });
         try {
           const res = await axios.post(
-                "https://qr-code-checkin.vercel.app/api/auth/manage-employee/login-employee",
+                "https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/auth/manage-employee/login-employee",
                 credentials,
                 { withCredentials: true }
             );
-            debugger;
-            console.log(res);
+            setIsLoading(false);
             if (res?.data?.details?.name) {
                 dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
-                navigate("/");
+                navigate("/check-in");
             }
         } catch (err) {
-            console.log(err);
-        
+            alert(err.response?.data?.message);
+            setIsLoading(false);
             dispatch({ type: "LOGIN_FAILURE", payload: "errr" });
         }
     };
@@ -70,11 +71,18 @@ const Login = () => {
                     </div>
                     <div className="d-grid gap-2 mt-3">
                         <button 
-                            disabled={loading}
+                            disabled={isLoading}
                             onClick={ handleLogin } 
                             type="submit" className="btn btn-primary"
                         >
-                        Login
+                            <span name="loading" aria-hidden="true" 
+                                className={
+                                    `spinner-border spinner-border-sm me-2
+                                    ${isLoading ? '' : 'd-none'}`
+                                }
+                            ></span>
+                            <span name="loading" className={`${isLoading ? '' : 'd-none'}`} role="status">Loggin in...</span>
+                            <span name="submitBtn" className={`${isLoading ? 'd-none' : ''}`}>Login</span>
                         </button>
                     </div>
                     {error && <span>{error.message}</span>}

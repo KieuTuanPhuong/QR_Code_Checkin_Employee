@@ -51,7 +51,7 @@ const Attendance = (props) => {
 
     const fetchScheduleEmployyee = async () => {
         try {
-            const response = await axios.get(`https://qr-code-checkin.vercel.app/api/employee/get-attendance?employeeID=${userID}`, { withCredentials: true });
+            const response = await axios.get(`https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/get-attendance?employeeID=${userID}`, { withCredentials: true });
             console.log("scheduleEmployeeAll", response.data);
             setScheduleEmployee(response.data);
             // setShiftDataByDate(employeeData?.message[0]?.department?.map((item) => item?.schedules));
@@ -92,7 +92,10 @@ const Attendance = (props) => {
                     const month = selectedDate.substring(5, 7);
                     const day = selectedDate.substring(8, 10)
                     const date = `${month}/${day}/${year}`
-                    const response = await axios.get(`https://qr-code-checkin.vercel.app/api/admin/manage-attendance/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${dateFormDb}`, { withCredentials: true });
+                    const response = await axios.get(
+                        `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/admin/manage-attendance/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${dateFormDb}`, 
+                        { withCredentials: true }
+                    );
 
                     setAttendanceDataByDate(response.data.message);
                     console.log("attendance", response.data);
@@ -112,7 +115,10 @@ const Attendance = (props) => {
                     const month = selectedDate.substring(5, 7);
                     const day = selectedDate.substring(8, 10)
                     const date = `${month}/${day}/${year}`
-                    const response = await axios.get(`https://qr-code-checkin.vercel.app/api/inhaber/manage-attendance/get-by-specific?inhaber_name=${userObject?.name}&employeeID=${id}&year=${year}&month=${month}&date=${dateFormDb}`, { withCredentials: true });
+                    const response = await axios.get(
+                        `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/inhaber/manage-attendance/get-by-specific?inhaber_name=${userObject?.name}&employeeID=${id}&year=${year}&month=${month}&date=${dateFormDb}`, 
+                        { withCredentials: true }
+                    );
 
                     setAttendanceDataByDate(response.data.message);
                     console.log("attendance", response.data);
@@ -202,7 +208,7 @@ const Attendance = (props) => {
         try {
             setLoading(true)
             const { data } = await axios.post(
-                `https://qr-code-checkin.vercel.app/api/employee/get-attendance?employeeID=${userID}`,
+                `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/get-attendance?employeeID=${userID}`,
                 {
                     dates: formData.data.dates,
                     shift_code: selectedShiftAddShiftForm,

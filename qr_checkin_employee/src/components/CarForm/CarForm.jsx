@@ -1,45 +1,56 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 
-const CarForm = () => {
+import AuthContext from "../../context/AuthContext";
+
+const CarForm = (props) => {
     const [selectedCartype, setSelectedCartype] = useState('company');
     const handleCartypeChange = (event) => {
         setSelectedCartype(event.target.value);
-    }
-    
-    const [formData, setFormData] = useState({
-        car_type: '',
-        car_number: '',
-        check_in_km: '',
-    });
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
-    const handleFormSubmit = async (event) => {
-        event.preventDefault();
-
-        try {
-            const response = await axios.post('your-api-endpoint', formData);
-
-            console.log(response.data);
-        } catch (error) {
-            console.error('Error submitting form:', error);
+        if (selectedCartype === "private") {
+            setNumberPlate('');
+            setRegisterDate('');
         }
-    };
+    }
+
+    const [carOptions, setCarOptions] = useState([]);
+    const [numberPlate, setNumberPlate] = useState('');
+    const [registerDate, setRegisterDate] = useState('');
+    
+    useEffect(() => {
+        const getCompanyCars = async () => {
+            try {
+                const response = await axios.get(
+                    `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/get-car`,
+                );
+                setCarOptions(response?.data?.message);
+            } catch (error) {
+                console.error('wrong');
+            }
+        }
+
+        getCompanyCars();
+
+    }, []);
+
+    const handleSelectCar = (event) => {
+        event.preventDefault()
+        const selectedValue = event.target.value;
+
+        if (selectedValue === 'Car 1') {
+            setNumberPlate('30F-333.33');
+            setRegisterDate('2023-12-24');
+        } else if (selectedValue === 'Car 2') {
+            setNumberPlate('30F-999.99');
+            setRegisterDate('2023-12-24');
+        }
+    }
+
 
     return (
         <>
-        <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#autofahrerForm">
-            Open autofahrer form
-        </button>
-
-        <div className="modal fade" id="autofahrerForm" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="autofahrerFormLabel" aria-hidden="true">
+        <div className={`modal fade ${props.showModal === 'Autofahrer' ? 'show' : ''}`} id="autofahrerForm" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="autofahrerFormLabel" aria-hidden="true">
             <div className="modal-dialog">
                 {/* Header */}
                 <div className="modal-content">
@@ -75,11 +86,34 @@ const CarForm = () => {
 
                     <div className={selectedCartype !== "company" ? 'd-none' : ''}>
                         <label className="form-label">Car name</label>
-                        <input type="text" className="form-control mb-3" placeholder="Enter car's name" />
+                        <select 
+                            className="form-select mb-3" 
+                            id="inputGroupSelect01"
+                            onChange={ handleSelectCar }
+                        >
+                            <option value="">Choose...</option>
+                            {carOptions?.map(option => (
+                                <option key={ option._id } value={ option.car_name }>
+                                    { option.car_name }
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                    <div className={selectedCartype !== "private" ? 'd-none' : ''}>
+                    <div className="mb-3">
                         <label className="form-label">Number plate</label>
-                        <input type="text" className="form-control mb-3" id="" placeholder="Enter car's number plate" />
+                        <input 
+                            type="text" className="form-control mb-3" 
+                            id="" placeholder="Enter car's number plate"
+                            value={numberPlate}
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Register date</label>
+                        <input 
+                            type="text" className="form-control mb-3" 
+                            placeholder="Enter car's register date" 
+                            value={registerDate}
+                        />
                     </div>
                     
                     <label className="form-label">Number of kilometers (check-in)</label>

@@ -12,7 +12,6 @@ import AuthContext from '../../context/AuthContext';
 
 const ScheduleTable = (props) => {
     const { id, name, departmentDefined, role } = props
-    console.log(departmentDefined);
     const [selectedYear, setSelectedYear] = useState(new Date());
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [employeeData, setEmployeeData] = useState(null);
@@ -42,7 +41,6 @@ const ScheduleTable = (props) => {
 
     const handleShiftClick = (shift) => {
         setSelectedShift(shift);
-        console.log(shift);
     };
 
     const {
@@ -51,8 +49,10 @@ const ScheduleTable = (props) => {
 
     const fetchScheduleEmployyee = async () => {
         try {
-            const response = await axios.get(`https://qr-code-checkin.vercel.app/api/employee/get-schedules?employeeID=${userID}`, { withCredentials: true });
-            console.log("scheduleEmployeeAll", response.data);
+            const response = await axios.get(
+                `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/get-schedules?employeeID=${userID}`, 
+                { withCredentials: true }
+            );
             setScheduleEmployee(response.data);
             // setShiftDataByDate(employeeData?.message[0]?.department?.map((item) => item?.schedules));
         } catch (error) {
@@ -86,7 +86,10 @@ const ScheduleTable = (props) => {
         const getAllShifts = async () => {
             if (userObject?.role === "Admin") {
                 try {
-                    const response = await axios.get('https://qr-code-checkin.vercel.app/api/admin/manage-shift/get-all', { withCredentials: true });
+                    const response = await axios.get(
+                        'https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/admin/manage-shift/get-all', 
+                        { withCredentials: true }
+                    );
                     // console.log(response.data.message);
                     setShiftList(response.data.message);
                 } catch (error) {
@@ -96,7 +99,10 @@ const ScheduleTable = (props) => {
 
             if (userObject?.role === "Inhaber") {
                 try {
-                    const response = await axios.get('https://qr-code-checkin.vercel.app/api/inhaber/manage-shift/get-all', { withCredentials: true });
+                    const response = await axios.get(
+                        'https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/inhaber/manage-shift/get-all', 
+                        { withCredentials: true }
+                    );
                     // console.log(response.data.message);
                     setShiftList(response.data.message);
                 } catch (error) {
@@ -115,10 +121,12 @@ const ScheduleTable = (props) => {
                     const month = selectedDate.substring(5, 7);
                     const day = selectedDate.substring(8, 10)
                     const date = `${month}/${day}/${year}`
-                    const response = await axios.get(`https://qr-code-checkin.vercel.app/api/admin/manage-date-design/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${date}`, { withCredentials: true });
+                    const response = await axios.get(
+                        `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/admin/manage-date-design/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${date}`, 
+                        { withCredentials: true }
+                    );
 
                     setScheduleDataByDate(response.data.message);
-                    console.log("schedule", response.data.message);
                 } catch (error) {
                     if (error.response && error.response.status) {
                         if (error.response.status === 404) {
@@ -136,10 +144,12 @@ const ScheduleTable = (props) => {
                     const month = selectedDate.substring(5, 7);
                     const day = selectedDate.substring(8, 10)
                     const date = `${month}/${day}/${year}`
-                    const response = await axios.get(`https://qr-code-checkin.vercel.app/api/inhaber/manage-date-design/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${date}&inhaber_name=${userObject?.name}`, { withCredentials: true });
+                    const response = await axios.get(
+                        `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/inhaber/manage-date-design/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${date}&inhaber_name=${userObject?.name}`, 
+                        { withCredentials: true }
+                    );
 
                     setScheduleDataByDate(response.data.message);
-                    console.log("schedule", response.data.message);
                 } catch (error) {
                     if (error.response && error.response.status) {
                         if (error.response.status === 404) {
@@ -178,12 +188,12 @@ const ScheduleTable = (props) => {
                 {/* You can customize the content of the tile here */}
                 {dataForDate?.length > 0 ? (
                     dataForDate.map(({ departmentName, shiftCode, position, end_time, start_time }, index) => (
-                        <div key={index} class="d-flex flex-column gap-2 border-secondary py-2 rounded-3 mt-2 bg-light align-items-center justify-content-center fw-bold">
-                            <div class='d-flex flex-row gap-2'>
-                                <div class="border border-danger bg-danger ms-2 rounded-circle" style={{ width: "0.6rem", height: "0.6rem" }}></div>
-                                <div class="text-dark">{departmentName}: {shiftCode}-{position}</div>
+                        <div key={index} className="d-flex flex-column gap-2 border-secondary py-2 rounded-3 mt-2 bg-light align-items-center justify-content-center fw-bold">
+                            <div className='d-flex flex-row gap-2'>
+                                <div className="border border-danger bg-danger ms-2 rounded-circle" style={{ width: "0.6rem", height: "0.6rem" }}></div>
+                                <div className="text-dark">{departmentName}: {shiftCode}-{position}</div>
                             </div>
-                            <div class="text-dark">({start_time}-{end_time})</div>
+                            <div className="text-dark">({start_time}-{end_time})</div>
                         </div>
                     ))
                 ) : (
@@ -223,7 +233,7 @@ const ScheduleTable = (props) => {
         try {
             setLoading(true)
             const { data } = await axios.post(
-                `https://qr-code-checkin.vercel.app/api/employee/get-attendance?employeeID=${userID}`,
+                `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/get-attendance?employeeID=${userID}`,
                 {
                     dates: formData.data.dates,
                     shift_code: selectedShiftAddShiftForm,
