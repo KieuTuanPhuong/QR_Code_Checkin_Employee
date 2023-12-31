@@ -5,7 +5,7 @@ const HomeView = () => {
     return (
         <>
         <Navigation />
-        {/* <ScanQR /> */}
+        <ScanQR />
         </>
     );
 }

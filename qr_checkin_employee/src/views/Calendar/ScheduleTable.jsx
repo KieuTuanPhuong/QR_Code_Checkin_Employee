@@ -8,7 +8,7 @@ import axios from 'axios';
 import { shiftType } from '../../assets/data/data';
 
 import Navigation from '../../components/Navigation/Navigation';
-import AuthContext from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 
 const ScheduleTable = (props) => {
     const { id, name, departmentDefined, role } = props
@@ -283,7 +283,7 @@ const ScheduleTable = (props) => {
     return (
         <>
             <Navigation />
-            <div className="flex flex-col justify-center items-center w-full gap-4 font-Changa text-textColor">
+            <div className="flex flex-col justify-center items-center w-full gap-4 font-Changa text-textColor mt-3">
                 <h2 className="text-2xl font-bold">Schedule Calendar</h2>
                 {selectedYear && (
                     <Calendar

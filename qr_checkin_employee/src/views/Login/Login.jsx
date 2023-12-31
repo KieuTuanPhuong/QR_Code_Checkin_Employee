@@ -1,19 +1,18 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext";
-
 import './Login.css';
+import { AuthContext } from "../../context/AuthContext";
 
 const Login = () => {
+    const [isLoading, setIsLoading] = useState(false);
+    
     const [credentials, setCredentials] = useState({
         name: undefined,
         password: undefined,
     });
     
     const { loading, error, dispatch } = useContext(AuthContext);
-    
-    const [isLoading, setIsLoading] = useState(false);
     
     const navigate = useNavigate();
     
@@ -26,15 +25,16 @@ const Login = () => {
         setIsLoading(true);
         dispatch({ type: "LOGIN_START" });
         try {
-          const res = await axios.post(
+            const res = await axios.post(
                 "https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/auth/manage-employee/login-employee",
                 credentials,
                 { withCredentials: true }
             );
+            // debugger;
             setIsLoading(false);
             if (res?.data?.details?.name) {
                 dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
-                navigate("/check-in");
+                navigate("/schedule");
             }
         } catch (err) {
             alert(err.response?.data?.message);
