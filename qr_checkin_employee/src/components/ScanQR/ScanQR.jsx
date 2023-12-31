@@ -15,6 +15,10 @@ const ScanQR = () => {
   const [isAttendanceChecked, setAttendanceChecked] = useState(false);
   console.log(userID);
 
+  const [position, setPosition] = useState();
+  const [attendanceID, setAttendanceID] = useState();
+  const [isCheckout, setIsCheckout] = useState();
+
   const handleScan = async (data) => {
     if (data && !isAttendanceChecked) {
       console.log(data);
@@ -24,7 +28,7 @@ const ScanQR = () => {
         // const timestamp = new Date().toISOString();
         const expectedQRDataArray = department.map(dept => `QR code for department ${dept.name}`);
         console.log(expectedQRDataArray);
-
+        debugger;
         if (expectedQRDataArray.includes(data.text)) {
           const res = await axios.post(
             "https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/check-attendance",
@@ -33,7 +37,20 @@ const ScanQR = () => {
           );
 
           if (res.data.success) {
+            // debugger;
             alert("Attendance checked successfully!");
+            if (res?.data?.message?.position === 'Autofahrer') {
+              setPosition('Autofahrer');
+              setAttendanceID(res?.data?.message?._id);
+            } 
+            if (res?.data?.message?.shift_info?.time_slot?.check_out) {
+              setIsCheckout(res?.data?.message?.shift_info?.time_slot?.check_out);
+              if (res?.data?.message?.position === 'Lito') {
+                setPosition('Lito');
+              } else if (res?.data?.message?.position === 'Service') {
+                setPosition('Service');
+              }
+            }
           } else {
             alert("Expired QR code. Please generate a new QR code.");
           }
@@ -63,18 +80,19 @@ const ScanQR = () => {
         key="environment"
         constraints={{ audio: false, video: { facingMode: "environment" } }}
       />
-      {/* <CarForm 
-        position={postion === 'Autofahrer'}
+      <CarForm 
+        position={position}
         attendance_id={attendanceID}
+        check_out={isCheckout}
       />
       <LitoForm 
-        position={postion === 'Lito'}
+        position={position}
         attendance_id={attendanceID}
       />
       <ServiceForm 
-        position={postion === 'Service'}
+        position={position}
         attendance_id={attendanceID}
-      /> */}
+      />
     </div>
   );
 };

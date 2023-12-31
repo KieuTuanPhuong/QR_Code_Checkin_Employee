@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 
 const CarForm = ( props ) => {
@@ -11,6 +12,8 @@ const CarForm = ( props ) => {
     const [numberPlate, setNumberPlate] = useState('');
     const [registerDate, setRegisterDate] = useState('');
     
+    const navigate = useNavigate();
+
     useEffect(() => {
         const getCompanyCars = async () => {
             try {
@@ -28,7 +31,7 @@ const CarForm = ( props ) => {
     }, []);
 
     const [formData, setFormData] = useState({
-        car_type: '',
+        car_type: selectedCartype,
         car_name: '',
         car_number: '',
         register_date: '',
@@ -54,12 +57,11 @@ const CarForm = ( props ) => {
                 `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/update-attendance?attendanceID=${ props.attendance_id }`,
                 formData,
             );
-            alert("Successfully update checkout!");
+            alert("Successfully update!");
+            navigate('/schedule');
         } catch (error) {
             alert(error.response?.data?.message);
         }
-
-        console.log('Form submitted:', formData);
     };   
 
     return (
@@ -68,7 +70,12 @@ const CarForm = ( props ) => {
             Open auto form
         </button>
 
-        <div className={`modal fade ${props.position === 'Autofahrer' ? 'show' : ''}`} id="autofahrerForm" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="autofahrerFormLabel" aria-hidden="true">
+        <div 
+            style={{ display: props.position === 'Autofahrer' ? 'block' : 'none' }}
+            className={`modal fade ${props.position === 'Autofahrer' ? 'show' : ''}`} 
+            id="autofahrerForm" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" 
+            aria-labelledby="autofahrerFormLabel" aria-hidden="true"
+        >
             <div className="modal-dialog">
                 {/* Header */}
                 <div className="modal-content">

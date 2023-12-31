@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LitoForm = ( props ) => {
     const [formData, setFormData] = useState({
@@ -32,6 +33,7 @@ const LitoForm = ( props ) => {
         });
     };
 
+    const navigate = useNavigate();
     const isFormValid = Object.values(formValid).every((field) => field);
 
     const handleSubmit = async (event) => {
@@ -42,7 +44,8 @@ const LitoForm = ( props ) => {
                 `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/update-attendance?attendanceID=${ props.attendance_id }`,
                 formData,
             );
-            alert("Successfully update checkout!");
+            alert("Successfully update!");
+            navigate('/schedule');
         } catch (error) {
             alert(error.response?.data?.message);
         }
@@ -56,7 +59,12 @@ const LitoForm = ( props ) => {
             Open lito form
         </button>
 
-        <div className={`modal fade ${props.position === 'Lito' ? 'show' : ''}`} id="litoForm" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="litoFormLabel" aria-hidden="true">
+        <div 
+            style={{ display: props.position === 'Lito' ? 'block' : 'none' }}
+            className={`modal fade ${props.position === 'Lito' ? 'show' : ''}`} 
+            id="litoForm" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" 
+            aria-labelledby="litoFormLabel" aria-hidden="true"
+        >
             <div className="modal-dialog">
                 {/* Header */}
                 <div className="modal-content">
@@ -81,7 +89,6 @@ const LitoForm = ( props ) => {
                     </div>
 
                     <div className="input-group has-validation mb-3">
-                        <span className="input-group-text">$</span>
                         <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
                             <input   
                                 type="number" placeholder="Username"
@@ -92,14 +99,12 @@ const LitoForm = ( props ) => {
                             />
                             <label>Kreditkarte</label>
                         </div>
-                        <span className="input-group-text">.00</span>
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
                     <div className="input-group mb-3">
-                        <span className="input-group-text">$</span>
                         <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
                             <input   
                                 type="number" placeholder="Username" 
@@ -110,14 +115,12 @@ const LitoForm = ( props ) => {
                             />
                             <label>Kassenschnitt</label>
                         </div>
-                        <span className="input-group-text">.00</span>
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
                     <div className="input-group mb-3">
-                        <span className="input-group-text">$</span>
                         <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
                             <input   
                                 type="number" placeholder="Username" 
@@ -128,14 +131,12 @@ const LitoForm = ( props ) => {
                             />
                             <label>Gesamt Liyerbude</label>
                         </div>
-                        <span className="input-group-text">.00</span>
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
                     <div className="input-group mb-3">
-                        <span className="input-group-text">$</span>
                         <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
                             <input   
                                 type="number" placeholder="Username" 
@@ -146,7 +147,6 @@ const LitoForm = ( props ) => {
                             />
                             <label>Gesamt Liyerando</label>
                         </div>
-                        <span className="input-group-text">.00</span>
                         <div className="invalid-feedback">
                             This field is required.
                         </div>

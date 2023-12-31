@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ServiceForm = ( props ) => {
     const [formData, setFormData] = useState({
@@ -31,7 +32,7 @@ const ServiceForm = ( props ) => {
             [name]: value !== '',
         });
     };
-
+    const navigate = useNavigate();
     const isFormValid = Object.values(formValid).every((field) => field);
 
     const handleSubmit = async (event) => {
@@ -43,6 +44,7 @@ const ServiceForm = ( props ) => {
                 formData,
             );
             alert("Successfully update checkout!");
+            navigate('schedule');
         } catch (error) {
             alert(error.response?.data?.message);
         }
@@ -56,7 +58,12 @@ const ServiceForm = ( props ) => {
             Open service form
         </button>
 
-        <div className={`modal fade ${props.position === 'Service' ? 'show' : ''}`} id="serviceForm" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="serviceFormLabel" aria-hidden="true">
+        <div 
+            style={{ display: props.position === 'Service' ? 'block' : 'none' }}
+            className={`modal fade ${props.position === 'Service' ? 'show' : ''}`} 
+            id="serviceForm" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" 
+            aria-labelledby="serviceFormLabel" aria-hidden="true"
+        >
             <div className="modal-dialog">
                 {/* Header */}
                 <div className="modal-content">
@@ -81,7 +88,6 @@ const ServiceForm = ( props ) => {
                     </div>
 
                     <div className="input-group has-validation mb-3">
-                        <span className="input-group-text">$</span>
                         <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
                             <input   
                                 type="number" placeholder="Username"
@@ -92,14 +98,12 @@ const ServiceForm = ( props ) => {
                             />
                             <label >Gesamt</label>
                         </div>
-                        <span className="input-group-text">.00</span>
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
                     <div className="input-group mb-3">
-                        <span className="input-group-text">$</span>
                         <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
                             <input   
                                 type="number" placeholder="Username" 
@@ -110,14 +114,12 @@ const ServiceForm = ( props ) => {
                             />
                             <label>Trinkgeld EC</label>
                         </div>
-                        <span className="input-group-text">.00</span>
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
                     <div className="input-group mb-3">
-                        <span className="input-group-text">$</span>
                         <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
                             <input   
                                 type="number" placeholder="Username" 
@@ -128,14 +130,12 @@ const ServiceForm = ( props ) => {
                             />
                             <label>Trinkgeld Gutschein</label>
                         </div>
-                        <span className="input-group-text">.00</span>
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
                     <div className="input-group mb-3">
-                        <span className="input-group-text">$</span>
                         <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
                             <input   
                                 type="number" placeholder="Username" 
@@ -146,7 +146,6 @@ const ServiceForm = ( props ) => {
                             />
                             <label>Auf Rechnung</label>
                         </div>
-                        <span className="input-group-text">.00</span>
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
