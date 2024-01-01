@@ -42,7 +42,6 @@ const Attendance = (props) => {
 
     const handleShiftClick = (shift) => {
         setSelectedShift(shift);
-        console.log(shift);
     };
 
     const {
