@@ -51,7 +51,6 @@ const Attendance = (props) => {
     const fetchScheduleEmployyee = async () => {
         try {
             const response = await axios.get(`https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/get-attendance?employeeID=${userID}`, { withCredentials: true });
-            console.log("scheduleEmployeeAll", response.data);
             setScheduleEmployee(response.data);
             // setShiftDataByDate(employeeData?.message[0]?.department?.map((item) => item?.schedules));
         } catch (error) {
