@@ -66,9 +66,10 @@ const CarForm = ( props ) => {
 
     return (
         <>
-        <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#autofahrerForm">
+        {/* Manually open the Form */}
+        {/* <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#autofahrerForm">
             Open auto form
-        </button>
+        </button> */}
 
         <div 
             style={{ display: props.position === 'Autofahrer' ? 'block' : 'none' }}
@@ -145,17 +146,18 @@ const CarForm = ( props ) => {
                             onChange={ handleInputChange }
                         />
                     </div>
-                    
-                    <label className="form-label">Number of kilometers (check-in)</label>
-                    <div className="input-group mb-3">
-                        <input 
-                            type="number" className="form-control" 
-                            placeholder="Enter number of kilometers" 
-                            name="check_in_km" 
-                            value={ formData.check_in_km }
-                            onChange={ handleInputChange }
-                        />
-                        <span className="input-group-text" >kilometer(s)</span>
+                    <div  className={`mb-3 ${ props.check_out ? 'd-none' : '' }`}>
+                        <label className="form-label">Number of kilometers (check-in)</label>
+                        <div className="input-group mb-3">
+                            <input 
+                                type="number" className="form-control" 
+                                placeholder="Enter number of kilometers" 
+                                name="check_in_km" 
+                                value={ formData.check_in_km }
+                                onChange={ handleInputChange }
+                            />
+                            <span className="input-group-text" >kilometer(s)</span>
+                        </div>
                     </div>
                     <div className={`mb-3 ${ props.check_out ? '' : 'd-none' }`}>
                         <label className="form-label">Number of kilometers (check-out)</label>

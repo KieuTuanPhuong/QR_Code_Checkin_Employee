@@ -30,7 +30,6 @@ const Login = () => {
                 credentials,
                 { withCredentials: true }
             );
-            // debugger;
             setIsLoading(false);
             if (res?.data?.details?.name) {
                 dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });

@@ -155,20 +155,22 @@ const Attendance = (props) => {
                 check_out_time:schedule.shift_info.time_slot.check_out_time,
                 check_in_status:schedule.shift_info.time_slot.check_in_status,
                 check_out_status:schedule.shift_info.time_slot.check_out_status,
+                results:schedule.results,
             }));
 
         return (
             <div className={`font-Changa calendar-tile ${dataForDate?.length > 0 ? "scheduled" : ""}`}>
                 {/* You can customize the content of the tile here */}
                 {dataForDate?.length > 0 ? (
-                    dataForDate.map(({ departmentName, shiftCode, check_in_time, check_out_time,check_out_status,check_in_status }, index) => (
+                    dataForDate.map(({ departmentName, shiftCode, check_in_time, check_out_time,check_out_status,check_in_status, results }, index) => (
                         <div key={index} class="d-flex flex-column gap-2 border-secondary py-2 rounded-3 mt-2 bg-light align-items-center justify-content-center fw-bold">
                             <div class='d-flex flex-row gap-2'>
                                 <div class="border border-danger bg-danger ms-2 rounded-circle" style={{ width: "0.6rem", height: "0.6rem" }}></div>
                                 <div class="text-dark">{departmentName}: {shiftCode}</div>
                             </div>
-                            <div class="text-dark">Check-in:{check_in_time}-{check_in_status}</div>
-                            <div class="text-dark">Check-out:{check_out_time}-{check_out_status}</div>
+                            <div class="text-dark">Check-in: {check_in_time}-{check_in_status}</div>
+                            <div class="text-dark">Check-out: {check_out_time}-{check_out_status}</div>
+                            <div class="text-dark">Result: {results}</div>
                         </div>
                     ))
                 ) : (

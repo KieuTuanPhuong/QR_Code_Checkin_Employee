@@ -22,13 +22,11 @@ const ScanQR = () => {
   const handleScan = async (data) => {
     if (data && !isAttendanceChecked) {
       console.log(data);
-      // debugger;
       try {
         setAttendanceChecked(true);
         // const timestamp = new Date().toISOString();
         const expectedQRDataArray = department.map(dept => `QR code for department ${dept.name}`);
         console.log(expectedQRDataArray);
-        debugger;
         if (expectedQRDataArray.includes(data.text)) {
           const res = await axios.post(
             "https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/check-attendance",
@@ -37,7 +35,6 @@ const ScanQR = () => {
           );
 
           if (res.data.success) {
-            // debugger;
             alert("Attendance checked successfully!");
             if (res?.data?.message?.position === 'Autofahrer') {
               setPosition('Autofahrer');
@@ -47,8 +44,10 @@ const ScanQR = () => {
               setIsCheckout(res?.data?.message?.shift_info?.time_slot?.check_out);
               if (res?.data?.message?.position === 'Lito') {
                 setPosition('Lito');
+                setAttendanceID(res?.data?.message?._id);
               } else if (res?.data?.message?.position === 'Service') {
                 setPosition('Service');
+                setAttendanceID(res?.data?.message?._id);
               }
             }
           } else {

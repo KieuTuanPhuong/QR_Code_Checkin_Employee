@@ -54,9 +54,10 @@ const ServiceForm = ( props ) => {
     
     return (
         <>
-        <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#serviceForm">
+        {/* Manually open the Form */}
+        {/* <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#serviceForm">
             Open service form
-        </button>
+        </button> */}
 
         <div 
             style={{ display: props.position === 'Service' ? 'block' : 'none' }}

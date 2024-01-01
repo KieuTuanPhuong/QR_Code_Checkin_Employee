@@ -55,9 +55,10 @@ const LitoForm = ( props ) => {
     
     return (
         <>
-        <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#litoForm">
+        {/* Manually open the Form */}
+        {/* <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#litoForm">
             Open lito form
-        </button>
+        </button> */}
 
         <div 
             style={{ display: props.position === 'Lito' ? 'block' : 'none' }}
