@@ -6,10 +6,15 @@ import RequestLog from "./RequestLog";
 const RequestHistory = () => {
     const [requestLogs, setRequestLogs] = useState([]);
 
+    const baseUrl = process.env.REACT_APP_BASE_API_URL;
+
+    const userString = localStorage.getItem('user');
+    const userObject = userString ? JSON.parse(userString) : null;
+
     const getRequestHistory = async () => {
         try {
             const response = await axios.get(
-                `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/get-all-request?employeeID=EMP-1`,
+                baseUrl + `/api/employee/get-all-request?employeeID=${userObject.id}&employeeName=${userObject.name}`
             );
             setRequestLogs(response?.data?.message);
         } catch (error) {

@@ -48,9 +48,17 @@ const Attendance = (props) => {
         user: {id: userID}
     } = useContext(AuthContext)
 
+    const userString = localStorage.getItem('user');
+    const userObject = userString ? JSON.parse(userString) : null;
+
+    const baseUrl = process.env.REACT_APP_BASE_API_URL;
+
     const fetchScheduleEmployyee = async () => {
         try {
-            const response = await axios.get(`https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/get-attendance?employeeID=${userID}`, { withCredentials: true });
+            const response = await axios.get(
+                baseUrl + `/api/employee/get-attendance?employeeID=${userID}&employeeName=${userObject.name}`,
+                { withCredentials: true }
+            );
             setScheduleEmployee(response.data);
             // setShiftDataByDate(employeeData?.message[0]?.department?.map((item) => item?.schedules));
         } catch (error) {
@@ -59,8 +67,6 @@ const Attendance = (props) => {
     };
 
     // useEffect(() => {
-    const userString = localStorage.getItem('user');
-    const userObject = userString ? JSON.parse(userString) : null;
     //     setUserObject(userObject)
     //     console.log(userObject);
     // }, [])
@@ -91,7 +97,7 @@ const Attendance = (props) => {
                     const day = selectedDate.substring(8, 10)
                     const date = `${month}/${day}/${year}`
                     const response = await axios.get(
-                        `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/admin/manage-attendance/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${dateFormDb}`, 
+                        baseUrl + `/api/admin/manage-attendance/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${dateFormDb}`,
                         { withCredentials: true }
                     );
 
@@ -114,7 +120,7 @@ const Attendance = (props) => {
                     const day = selectedDate.substring(8, 10)
                     const date = `${month}/${day}/${year}`
                     const response = await axios.get(
-                        `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/inhaber/manage-attendance/get-by-specific?inhaber_name=${userObject?.name}&employeeID=${id}&year=${year}&month=${month}&date=${dateFormDb}`, 
+                        baseUrl + `/api/inhaber/manage-attendance/get-by-specific?inhaber_name=${userObject?.name}&employeeID=${id}&year=${year}&month=${month}&date=${dateFormDb}`,
                         { withCredentials: true }
                     );
 
@@ -208,7 +214,7 @@ const Attendance = (props) => {
         try {
             setLoading(true)
             const { data } = await axios.post(
-                `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/get-attendance?employeeID=${userID}`,
+                baseUrl + `/api/employee/get-attendance?employeeID=${userID}&employeeName=${userObject.name}`,
                 {
                     dates: formData.data.dates,
                     shift_code: selectedShiftAddShiftForm,

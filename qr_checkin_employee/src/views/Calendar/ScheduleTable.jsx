@@ -47,10 +47,15 @@ const ScheduleTable = (props) => {
         user: { id: userID }
     } = useContext(AuthContext)
 
+    const userString = localStorage.getItem('user');
+    const userObject = userString ? JSON.parse(userString) : null;
+
+    const baseUrl = process.env.REACT_APP_BASE_API_URL;
+
     const fetchScheduleEmployyee = async () => {
         try {
             const response = await axios.get(
-                `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/get-schedules?employeeID=${userID}`, 
+                baseUrl + `/api/employee/get-schedules?employeeID=${userID}&employeeName=${userObject.name}`,
                 { withCredentials: true }
             );
             setScheduleEmployee(response.data);
@@ -61,8 +66,6 @@ const ScheduleTable = (props) => {
     };
 
     // useEffect(() => {
-    const userString = localStorage.getItem('user');
-    const userObject = userString ? JSON.parse(userString) : null;
     //     setUserObject(userObject)
     //     console.log(userObject);
     // }, [])
@@ -87,7 +90,7 @@ const ScheduleTable = (props) => {
             if (userObject?.role === "Admin") {
                 try {
                     const response = await axios.get(
-                        'https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/admin/manage-shift/get-all', 
+                        baseUrl + '/api/admin/manage-shift/get-all', 
                         { withCredentials: true }
                     );
                     // console.log(response.data.message);
@@ -100,7 +103,7 @@ const ScheduleTable = (props) => {
             if (userObject?.role === "Inhaber") {
                 try {
                     const response = await axios.get(
-                        'https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/inhaber/manage-shift/get-all', 
+                        baseUrl + '/api/inhaber/manage-shift/get-all',
                         { withCredentials: true }
                     );
                     // console.log(response.data.message);
@@ -122,7 +125,7 @@ const ScheduleTable = (props) => {
                     const day = selectedDate.substring(8, 10)
                     const date = `${month}/${day}/${year}`
                     const response = await axios.get(
-                        `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/admin/manage-date-design/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${date}`, 
+                        baseUrl `/api/admin/manage-date-design/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${date}`,
                         { withCredentials: true }
                     );
 
@@ -145,7 +148,7 @@ const ScheduleTable = (props) => {
                     const day = selectedDate.substring(8, 10)
                     const date = `${month}/${day}/${year}`
                     const response = await axios.get(
-                        `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/inhaber/manage-date-design/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${date}&inhaber_name=${userObject?.name}`, 
+                        baseUrl + `/api/inhaber/manage-date-design/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${date}&inhaber_name=${userObject?.name}`,
                         { withCredentials: true }
                     );
 
@@ -233,7 +236,7 @@ const ScheduleTable = (props) => {
         try {
             setLoading(true)
             const { data } = await axios.post(
-                `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/get-attendance?employeeID=${userID}`,
+                baseUrl + `/api/employee/get-attendance?employeeID=${userID}&employeeName=${userObject.name}`,
                 {
                     dates: formData.data.dates,
                     shift_code: selectedShiftAddShiftForm,
