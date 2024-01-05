@@ -19,18 +19,23 @@ const ScanQR = () => {
   const [attendanceID, setAttendanceID] = useState();
   const [isCheckout, setIsCheckout] = useState();
 
+  const baseUrl = process.env.REACT_APP_BASE_API_URL;
+
   const handleScan = async (data) => {
     if (data && !isAttendanceChecked) {
       console.log(data);
       try {
+        const userString = localStorage.getItem('user');
+        const userObject = userString ? JSON.parse(userString) : null;
+    
         setAttendanceChecked(true);
         // const timestamp = new Date().toISOString();
         const expectedQRDataArray = department.map(dept => `QR code for department ${dept.name}`);
         console.log(expectedQRDataArray);
         if (expectedQRDataArray.includes(data.text)) {
           const res = await axios.post(
-            "https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/check-attendance",
-            { employeeID: userID },
+            baseUrl + '/api/employee/check-attendance',
+            { employeeID: userID, employeeName: userObject.name },
             { withCredentials: true }
           );
 
