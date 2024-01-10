@@ -1,17 +1,22 @@
 import { useState, useContext } from "react";
 import axios from "axios";
+import { format } from "date-fns/format";
 
 import { AuthContext } from "../../context/AuthContext";
 import Navigation from "../../components/Navigation/Navigation";
 import RequestHistory from "../../components/RequestHistory/RequestHistory";
+import BootstrapDatepicker from "../../components/BootstrapDatepicker/BootstrapDatepicker";
 
 const VacationRequest = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+
     const [formData, setFormData] = useState({
-        request_dayOff_start: '',
-        request_dayOff_end: '',
+        request_dayOff_start: format(startDate, 'MM/dd/yyy'),
+        request_dayOff_end: format(endDate, 'MM/dd/yyyy'),
         request_content: '',
     });
 
@@ -54,29 +59,26 @@ const VacationRequest = () => {
         <Navigation />
         <div className="container p-4 mt-5">
             <h4 className="mb-3">Request vacation form</h4>
+            
             <label className="form-label">Start day</label>
-            <div className="input-group mb-3">
-                <input 
-                    type="text" 
-                    className="form-control" 
-                    placeholder="mm/dd/yyyy"
-                    name="request_dayOff_start"
-                    value={ formData.request_dayOff_start }
-                    onChange={ handleInputChange }
-                    disabled={isLoading} 
+            <div className="mb-3">
+                <BootstrapDatepicker
+                    wrapperClassName="datepicker" 
+                    className="form-control"
+                    dateFormat="dd/MM/yyyy"
+                    selected={startDate} 
+                    onChange={(date) => setStartDate(date)} 
                 />
             </div>
 
             <label className="form-label">End day</label>
-            <div className="input-group mb-3">
-                <input 
-                    type="text" 
-                    className="form-control" 
-                    placeholder="mm/dd/yyyy"
-                    name="request_dayOff_end"
-                    value={ formData.request_dayOff_end }
-                    onChange={ handleInputChange } 
-                    disabled={isLoading}
+            <div className="mb-3 w-100">
+                <BootstrapDatepicker
+                    wrapperClassName="datepicker" 
+                    className="form-control w-100"
+                    dateFormat="dd/MM/yyyy"
+                    selected={endDate} 
+                    onChange={(date) => setEndDate(date)} 
                 />
             </div>
 
