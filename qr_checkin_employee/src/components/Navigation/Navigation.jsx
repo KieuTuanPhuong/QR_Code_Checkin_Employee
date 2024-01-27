@@ -19,6 +19,9 @@ const Navigation = () => {
                             <a className="nav-link" href="attendance-history" >Attendance history</a>
                         </li>
                         <li className="nav-item">
+                            <a className="nav-link" href="today-shifts" >Today shifts</a>
+                        </li>
+                        <li className="nav-item">
                             <a className="nav-link" href="check-in" >Scan QR</a>
                         </li>
                         <li className="nav-item">

@@ -37,7 +37,6 @@ const ScheduleTable = (props) => {
 
     const [checkInhaber, setCheckInhaber] = useState(false)
     const [checkManager, setCheckManager] = useState(false)
-    const [checkAdmin, setCheckAdmin] = useState(false)
 
     const handleShiftClick = (shift) => {
         setSelectedShift(shift);
@@ -56,7 +55,8 @@ const ScheduleTable = (props) => {
         
         try {
             const response = await axios.get(
-                baseUrl + `/api/employee/get-schedules?employeeID=${userID}&employeeName=${userObject.name}`,
+                // baseUrl + `/api/employee/get-schedules?employeeID=${userID}&employeeName=${userObject.name}`,
+                baseUrl + `/api/employee/get-schedules?employeeID=QIB&employeeName=Quanginhabertest&department_name=C1`,
                 { withCredentials: true }
             );
             setScheduleEmployee(response.data);
@@ -72,14 +72,7 @@ const ScheduleTable = (props) => {
     // }, [])
 
     useEffect(() => {
-        if (userObject?.role === 'Admin') {
-            setCheckAdmin(true)
-            setCheckInhaber(false)
-            setCheckManager(false)
-        }
-
         if (userObject?.role === 'Inhaber') {
-            setCheckAdmin(false)
             setSelectedDepartmentEmployee(userObject?.department_name)
             setCheckInhaber(true)
             setCheckManager(false)
@@ -88,19 +81,6 @@ const ScheduleTable = (props) => {
 
     useEffect(() => {
         const getAllShifts = async () => {
-            if (userObject?.role === "Admin") {
-                try {
-                    const response = await axios.get(
-                        baseUrl + '/api/admin/manage-shift/get-all', 
-                        { withCredentials: true }
-                    );
-                    // console.log(response.data.message);
-                    setShiftList(response.data.message);
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                }
-            }
-
             if (userObject?.role === "Inhaber") {
                 try {
                     const response = await axios.get(
@@ -119,29 +99,6 @@ const ScheduleTable = (props) => {
         fetchScheduleEmployyee();
 
         const fetchScheduleDataByDate = async () => {
-            if (userObject?.role === "Admin") {
-                try {
-                    const year = selectedDate.substring(0, 4);
-                    const month = selectedDate.substring(5, 7);
-                    const day = selectedDate.substring(8, 10)
-                    const date = `${month}/${day}/${year}`
-                    const response = await axios.get(
-                        baseUrl `/api/admin/manage-date-design/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${date}`,
-                        { withCredentials: true }
-                    );
-
-                    setScheduleDataByDate(response.data.message);
-                } catch (error) {
-                    if (error.response && error.response.status) {
-                        if (error.response.status === 404) {
-                            setScheduleDataByDate([])
-                        }
-                    } else {
-                        console.error("Error fetching schedule data:", error.message);
-                    }
-                }
-            }
-
             if (userObject?.role === "Inhaber") {
                 try {
                     const year = selectedDate.substring(0, 4);
@@ -356,29 +313,6 @@ const ScheduleTable = (props) => {
                                                 ))}
                                             </select>
                                         </div>
-                                        {checkAdmin ? (<div className="w-full flex flex-col gap-2">
-                                            <div className="flex flex-row gap-2">
-                                                <span className="text-rose-500">*</span>
-                                                <span className="">Department</span>
-                                            </div>
-                                            <select
-                                                id="department"
-                                                name="department"
-                                                className="w-full cursor-pointer"
-                                                value={selectedDepartmentEmployee}
-                                                onChange={(e) => setSelectedDepartmentEmployee(e.target.value)}
-                                                required
-                                            >
-                                                <option value="" disabled className='italic text-sm'>Select Department*</option>
-                                                {departmentDefined?.map((item, index) => (
-                                                    <option className='text-sm text-textColor w-full' key={index} value={item}>
-                                                        {item}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>) : (
-                                            <div></div>
-                                        )}
                                         <div className="w-full flex flex-col gap-2">
                                             <div className="flex flex-row gap-2">
                                                 <span className="text-rose-500">*</span>

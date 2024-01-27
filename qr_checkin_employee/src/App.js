@@ -11,6 +11,7 @@ import ScheduleTable from "./views/Calendar/ScheduleTable";
 import Attendance from "./views/Attendance/Attendance";
 import EmployeeForm from "./views/EmployeeForm/EmployeeForm";
 import VacationRequest from "./views/VacationRequest/VacationRequest";
+import TodayShifts from "./views/TodayShifts/TodayShift";
 import { AuthContextProvider } from "./context/AuthContext";
 
 function App() {
@@ -18,13 +19,14 @@ function App() {
   return (
     <AuthContextProvider>
       <Routes>
-        <Route path="/" element={ <HomeView /> }/>
+        <Route path="/" element={ <Login /> }/>
         <Route path="login" element={ <Login /> }/>
         <Route path="check-in" element={ <HomeView /> }/>
         <Route path="schedule" element={ <ScheduleTable /> }/>
         <Route path="attendance-history" element={ <Attendance /> }/>
         <Route path="employee-form" element={ <EmployeeForm /> }/>
         <Route path="vacation-request" element={ <VacationRequest /> }/>
+        <Route path="today-shifts" element={ <TodayShifts /> }/>
       </Routes>
     </AuthContextProvider>
   );

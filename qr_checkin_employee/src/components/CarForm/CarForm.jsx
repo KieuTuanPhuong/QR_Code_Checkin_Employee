@@ -67,9 +67,9 @@ const CarForm = ( props ) => {
     return (
         <>
         {/* Manually open the Form */}
-        {/* <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#autofahrerForm">
+        <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#autofahrerForm">
             Open auto form
-        </button> */}
+        </button>
 
         <div 
             style={{ display: props.position === 'Autofahrer' ? 'block' : 'none' }}

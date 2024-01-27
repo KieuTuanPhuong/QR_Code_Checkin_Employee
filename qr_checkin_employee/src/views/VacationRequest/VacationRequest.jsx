@@ -17,7 +17,7 @@ const VacationRequest = () => {
     const [formData, setFormData] = useState({
         request_dayOff_start: format(startDate, 'MM/dd/yyy'),
         request_dayOff_end: format(endDate, 'MM/dd/yyyy'),
-        request_content: '',
+        request_content: 'Holiday',
     });
 
     const {
@@ -48,10 +48,10 @@ const VacationRequest = () => {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setFormData({
+        setFormData((formData) => ({
             ...formData,
             [name]: value,
-        });
+        }));
     }
 
     return (
@@ -82,17 +82,27 @@ const VacationRequest = () => {
                 />
             </div>
 
-            <label className="form-label">Reason</label>
-            <div className="input-group mb-3">
-                <textarea 
-                    className="form-control" 
-                    id="exampleFormControlTextarea1" 
-                    rows="3"
-                    name="request_content"
-                    value={ formData.request_content }
-                    onChange={ handleInputChange }
-                    disabled={isLoading}
-                ></textarea>
+            <label className="form-label">Type</label>
+            <div className="mb-3">
+                <input 
+                    type="radio" className="btn-check" 
+                    name="request_content" id="holidayOption" 
+                    autoComplete="off"
+                    value="Holiday"
+                    onChange={(val) => handleInputChange(val)}
+                />
+                <label className="btn btn-outline-primary" htmlFor="holidayOption">Holiday</label>
+
+                <div className="vr m-1"></div>
+
+                <input 
+                    type="radio" className="btn-check" 
+                    name="request_content" id="sickdayOption" 
+                    autoComplete="off" 
+                    value="Sick day"
+                    onChange={(val) => handleInputChange(val)}
+                />
+                <label className="btn btn-outline-primary" htmlFor="sickdayOption">Sick day</label>
             </div>
 
             <div className="">
