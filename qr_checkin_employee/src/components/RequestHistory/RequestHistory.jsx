@@ -5,6 +5,22 @@ import RequestLog from "./RequestLog";
 
 const RequestHistory = () => {
     const [requestLogs, setRequestLogs] = useState([]);
+    const [timeStamp, setTimeStamp] = useState();
+
+    useEffect(() => {
+        const updateTimestamp = () => {
+            const currentTimestamp = new Date().getTime();
+            setTimeStamp(currentTimestamp);
+        };
+    
+        updateTimestamp();
+    
+        const intervalId = setInterval(updateTimestamp, 10000);
+    
+        return () => clearInterval(intervalId);
+    }, []);
+
+    const thirtyDaysAgo = timeStamp - (30 * 24 * 60 * 60 * 1000);
 
     const baseUrl = process.env.REACT_APP_BASE_API_URL;
 
@@ -22,18 +38,34 @@ const RequestHistory = () => {
             console.log(error);
         }
     }
-    
+
     const requestList = requestLogs.map((request) => {
-        return (
-            <RequestLog 
-                request={request} key={request._id} 
-                createdAt={request.createdAt.slice(0, 10)}
-                answer_status={request.answer_status}
-                request_dayOff_start={request.request_dayOff_start.slice(0, 10)}
-                request_dayOff_end={request.request_dayOff_end.slice(0, 10)}
-                request_content={request.request_content}
-            />
-        );
+        const lastUpdated = Date.parse(request?.updatedAt);
+        const status = request?.answer_status;
+
+        if (lastUpdated >= thirtyDaysAgo) {
+            return (
+                <RequestLog 
+                    request={request} key={request._id} 
+                    createdAt={request.createdAt.slice(0, 10)}
+                    answer_status={request.answer_status}
+                    request_dayOff_start={request.request_dayOff_start.slice(0, 10)}
+                    request_dayOff_end={request.request_dayOff_end.slice(0, 10)}
+                    request_content={request.request_content}
+                />
+            );
+        } else if (lastUpdated < thirtyDaysAgo && status == 'pending') {
+            return (
+                <RequestLog 
+                    request={request} key={request._id} 
+                    createdAt={request.createdAt.slice(0, 10)}
+                    answer_status={request.answer_status}
+                    request_dayOff_start={request.request_dayOff_start.slice(0, 10)}
+                    request_dayOff_end={request.request_dayOff_end.slice(0, 10)}
+                    request_content={request.request_content}
+                />
+            );
+        }
     });
 
     return (
@@ -46,23 +78,27 @@ const RequestHistory = () => {
             Request History
         </button>
 
-        <div className="modal fade" id="requestHistory" tabIndex="-1" aria-labelledby="historyLabel" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div className="modal-content">
-            <div className="modal-header">
-                <h1 className="modal-title fs-5" id="historyLabel">Request History</h1>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div 
+            className="modal fade" id="requestHistory" 
+            tabIndex="-1" aria-labelledby="historyLabel" 
+            aria-hidden="true"
+        >
+            <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div className="modal-content">
+                <div className="modal-header">
+                    <h1 className="modal-title fs-5" id="historyLabel">Request History</h1>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div className="modal-body">
+                    <ul className="list-group">
+                        { requestList }
+                    </ul>
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+                </div>
             </div>
-            <div className="modal-body">
-                <ul className="list-group">
-                    { requestList }
-                </ul>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-            </div>
-        </div>
         </div>        
         </>
     );
