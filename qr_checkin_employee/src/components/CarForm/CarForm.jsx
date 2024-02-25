@@ -6,11 +6,23 @@ const CarForm = ( props ) => {
     const [selectedCartype, setSelectedCartype] = useState('company');
     const handleCartypeChange = (event) => {
         setSelectedCartype(event.target.value);
+        if (event.target.value === 'private') {
+            const newFormData = {
+                ...formData,
+                car_name: 'PRIVATE',
+            };
+            setFormData(newFormData);    
+        } else {
+            const newFormData = {
+                ...formData,
+                car_name: '',
+            };
+            setFormData(newFormData);
+        }
     }
 
     const [carOptions, setCarOptions] = useState([]);
-    const [numberPlate, setNumberPlate] = useState('');
-    const [registerDate, setRegisterDate] = useState('');
+    const [selectedCar, setSelectedCar] = useState();
     
     const navigate = useNavigate();
 
@@ -20,7 +32,8 @@ const CarForm = ( props ) => {
                 const response = await axios.get(
                     `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/get-car`,
                 );
-                setCarOptions(response?.data?.message);
+                const companyCarOptions = response?.data?.message.filter(item => item.car_name !== "PRIVATE");
+                setCarOptions(companyCarOptions);
             } catch (error) {
                 console.error('Cannot get company cars!');
             }
@@ -33,8 +46,6 @@ const CarForm = ( props ) => {
     const [formData, setFormData] = useState({
         car_type: selectedCartype,
         car_name: '',
-        car_number: '',
-        register_date: '',
         check_in_km: '',
         check_out_km: '',
     });
@@ -53,6 +64,7 @@ const CarForm = ( props ) => {
         event.preventDefault();
 
         try {
+            console.log('data:', formData);
             const response = await axios.post(
                 `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/update-attendance?attendanceID=${ props.attendance_id }`,
                 formData,
@@ -67,9 +79,9 @@ const CarForm = ( props ) => {
     return (
         <>
         {/* Manually open the Form */}
-        <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#autofahrerForm">
+        {/* <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#autofahrerForm">
             Open auto form
-        </button>
+        </button> */}
 
         <div 
             style={{ display: props.position === 'Autofahrer' ? 'block' : 'none' }}
@@ -114,7 +126,6 @@ const CarForm = ( props ) => {
                         <label className="form-label">Car name</label>
                         <select 
                             className="form-select mb-3" 
-                            id="inputGroupSelect01"
                             name="car_name"
                             onChange={ handleInputChange }
                         >
@@ -126,26 +137,7 @@ const CarForm = ( props ) => {
                             ))}
                         </select>
                     </div>
-                    <div className={selectedCartype !== "private" ? 'd-none' : ''}>
-                        <label className="form-label">Number plate</label>
-                        <input 
-                            type="text" className="form-control mb-3" 
-                            id="" placeholder="Enter car's number plate"
-                            name="car_number"
-                            value={ formData.car_number }
-                            onChange={ handleInputChange }
-                        />
-                    </div>
-                    <div className={selectedCartype !== "private" ? 'd-none' : ''}>
-                        <label className="form-label">Register date</label>
-                        <input 
-                            type="text" className="form-control mb-3" 
-                            placeholder="Enter car's register date" 
-                            name="register_date" 
-                            value={ formData.register_date }
-                            onChange={ handleInputChange }
-                        />
-                    </div>
+
                     <div  className={`mb-3 ${ props.check_out ? 'd-none' : '' }`}>
                         <label className="form-label">Number of kilometers (check-in)</label>
                         <div className="input-group mb-3">
@@ -159,6 +151,7 @@ const CarForm = ( props ) => {
                             <span className="input-group-text" >kilometer(s)</span>
                         </div>
                     </div>
+                    
                     <div className={`mb-3 ${ props.check_out ? '' : 'd-none' }`}>
                         <label className="form-label">Number of kilometers (check-out)</label>
                         <div className="input-group">
