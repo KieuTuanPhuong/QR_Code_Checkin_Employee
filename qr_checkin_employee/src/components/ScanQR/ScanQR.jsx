@@ -37,7 +37,7 @@ const ScanQR = () => {
         const attendanceHistory = response?.data?.message;
 
         const todayAttend = attendanceHistory.filter(item => item.date === todayISO);
-        if (todayAttend.shift_info.time_slot.check_out_status === 'on time') {
+        if (todayAttend.shift_info?.time_slot?.check_out_status === 'on time') {
           setIsCheckout(true);
         }
       } catch (error) {
