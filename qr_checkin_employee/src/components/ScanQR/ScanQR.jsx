@@ -13,7 +13,6 @@ const ScanQR = () => {
     user: { id: userID, department },
   } = useContext(AuthContext);
   const [isAttendanceChecked, setAttendanceChecked] = useState(false);
-  console.log(userID);
 
   const [position, setPosition] = useState();
   const [attendanceID, setAttendanceID] = useState();
@@ -23,6 +22,31 @@ const ScanQR = () => {
 
   const userString = localStorage.getItem('user');
   const userObject = userString ? JSON.parse(userString) : null;
+
+  useEffect(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    const todayISO = date.toISOString();
+
+    const getAttendanceHistory = async () => {
+      try {
+        const response = await axios.get(
+          baseUrl + `/api/employee/get-attendance?employeeID=${userObject.id}&employeeName=${userObject.name}`
+        );
+
+        const attendanceHistory = response?.data?.message;
+
+        const todayAttend = attendanceHistory.filter(item => item.date === todayISO);
+        if (todayAttend.shift_info.time_slot.check_out_status === 'on time') {
+          setIsCheckout(true);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    getAttendanceHistory();
+  }, []);  
 
   const handleScan = async (data) => {
     if (data && !isAttendanceChecked) {
@@ -118,10 +142,8 @@ const ScanQR = () => {
     <div 
       style={{ display: position ? 'block' : 'none' }}
       className={`modal fade ${position ? 'show' : ''}`} 
-      // style={{display: 'block'}}
-      // className="modal fade show" 
       id="departmentSelect" data-bs-backdrop="static" 
-      data-bs-keyboard="false" tabindex="-1" 
+      data-bs-keyboard="false" tabIndex="-1" 
       aria-labelledby="departmentSelectLabel" aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
@@ -132,10 +154,10 @@ const ScanQR = () => {
           </div>
           <div className="modal-body">
             <select 
-              class="form-select" 
+              className="form-select" 
               aria-label="Default select example"
             >
-              <option selected>Open this select menu</option>
+              <option defaultValue={null}>Open this select menu</option>
               <option value="1">C1</option>
               <option value="2">C2</option>
               <option value="3">C2</option>
