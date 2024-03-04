@@ -44,7 +44,7 @@ const BootstrapDatepicker = (props) => {
                         type="button"
                     >
                         {"<"}
-                    </button>
+                     </button>
                 </div>
 
                 <input
@@ -89,6 +89,7 @@ const BootstrapDatepicker = (props) => {
             minDate={false}
             selected={props.selected}
             onChange={props.onChange}
+            name={props.name}
         />
         </>
     );

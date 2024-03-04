@@ -6,19 +6,22 @@ import { AuthContext } from "../../context/AuthContext";
 import Navigation from "../../components/Navigation/Navigation";
 import RequestHistory from "../../components/RequestHistory/RequestHistory";
 import BootstrapDatepicker from "../../components/BootstrapDatepicker/BootstrapDatepicker";
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 const VacationRequest = () => {
 
     const [isLoading, setIsLoading] = useState(false);
-
+    
+    const [type, setType] = useState('Holiday');
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
 
-    const [formData, setFormData] = useState({
+    const formData = {
         request_dayOff_start: format(startDate, 'MM/dd/yyy'),
         request_dayOff_end: format(endDate, 'MM/dd/yyyy'),
-        request_content: 'Holiday',
-    });
+        request_content: type,
+    };
 
     const {
         user: {id: userID}
@@ -46,14 +49,6 @@ const VacationRequest = () => {
         }
     }
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormData((formData) => ({
-            ...formData,
-            [name]: value,
-        }));
-    }
-
     return (
         <>
         <Navigation />
@@ -66,8 +61,9 @@ const VacationRequest = () => {
                     wrapperClassName="datepicker" 
                     className="form-control"
                     dateFormat="dd/MM/yyyy"
+                    name="request_dayOff_start"
                     selected={startDate} 
-                    onChange={(date) => setStartDate(date)} 
+                    onChange={(date) => setStartDate(date)}
                 />
             </div>
 
@@ -89,7 +85,7 @@ const VacationRequest = () => {
                     name="request_content" id="holidayOption" 
                     autoComplete="off"
                     value="Holiday"
-                    onChange={(val) => handleInputChange(val)}
+                    onChange={(val) => setType(val)}
                 />
                 <label className="btn btn-outline-primary" htmlFor="holidayOption">Holiday</label>
 
@@ -100,7 +96,7 @@ const VacationRequest = () => {
                     name="request_content" id="sickdayOption" 
                     autoComplete="off" 
                     value="Sick day"
-                    onChange={(val) => handleInputChange(val)}
+                    onChange={(val) => setType(val)}
                 />
                 <label className="btn btn-outline-primary" htmlFor="sickdayOption">Sick day</label>
             </div>
