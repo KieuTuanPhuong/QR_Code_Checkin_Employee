@@ -46,7 +46,7 @@ const ScanQR = () => {
     }
 
     getAttendanceHistory();
-  }, []);  
+  }, []);
 
   const handleScan = async (data) => {
     if (data && !isAttendanceChecked) {
@@ -119,56 +119,56 @@ const ScanQR = () => {
         style={{ width: "100%" }}
         key="environment"
         constraints={{ audio: false, video: { facingMode: "environment" } }}
-        // constraints={{ audio: false, video: false }}
+      // constraints={{ audio: false, video: false }}
       />
-      <CarForm 
+      <CarForm
         position={position}
         attendance_id={attendanceID}
         check_out={isCheckout}
       />
-      <LitoForm 
+      <LitoForm
         position={position}
         attendance_id={attendanceID}
       />
-      <ServiceForm 
+      <ServiceForm
         position={position}
         attendance_id={attendanceID}
       />
 
-    {/* <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#departmentSelect">
+      {/* <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#departmentSelect">
       Launch static backdrop modal
     </button> */}
 
-    <div 
-      style={{ display: position ? 'block' : 'none' }}
-      className={`modal fade ${position ? 'show' : ''}`} 
-      id="departmentSelect" data-bs-backdrop="static" 
-      data-bs-keyboard="false" tabIndex="-1" 
-      aria-labelledby="departmentSelectLabel" aria-hidden="true"
-    >
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h1 className="modal-title fs-5" id="departmentSelectLabel">Select department</h1>
-            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div className="modal-body">
-            <select 
-              className="form-select" 
-              aria-label="Default select example"
-            >
-              <option defaultValue={null}>Open this select menu</option>
-              <option value="1">C1</option>
-              <option value="2">C2</option>
-              <option value="3">C2</option>
-            </select>
-          </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-primary">OK</button>
+      <div
+        style={{ display: position ? 'block' : 'none' }}
+        className={`modal fade ${position ? 'show' : ''}`}
+        id="departmentSelect" data-bs-backdrop="static"
+        data-bs-keyboard="false" tabIndex="-1"
+        aria-labelledby="departmentSelectLabel" aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="departmentSelectLabel">Select department</h1>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <select
+                className="form-select"
+                aria-label="Default select example"
+              >
+                <option defaultValue={null}>Open this select menu</option>
+                <option value="1">C1</option>
+                <option value="2">C2</option>
+                <option value="3">C2</option>
+              </select>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-primary">OK</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };

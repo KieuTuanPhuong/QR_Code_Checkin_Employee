@@ -20,7 +20,7 @@ const TodayShifts = () => {
         const getCoWorker = async () => {
             try {
                 const response = await axios.get(
-                    baseUrl + `/api/employee/get-co-worker?employeeID=${userObject.id}&employeeName=${userObject.name}&department_name=${userObject.department[0].name}&date=${today}`
+                    baseUrl + `/api/employee/get-co-worker?employeeID=${userObject.id}&employeeName=${userObject.name}&date=${today}`
                 );
                 setShiftObj(response?.data?.message);
             } catch (error) {
