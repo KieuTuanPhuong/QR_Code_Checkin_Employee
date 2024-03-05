@@ -18,7 +18,7 @@ const VacationRequest = () => {
     const [endDate, setEndDate] = useState(new Date());
 
     const formData = {
-        request_dayOff_start: format(startDate, 'MM/dd/yyy'),
+        request_dayOff_start: format(startDate, 'MM/dd/yyyy'),
         request_dayOff_end: format(endDate, 'MM/dd/yyyy'),
         request_content: type,
     };

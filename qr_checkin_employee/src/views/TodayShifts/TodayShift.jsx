@@ -1,26 +1,46 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { format } from "date-fns/format";
+
+
 import Navigation from "../../components/Navigation/Navigation";
+import CoworkerCard from "../../components/CoworkerCard/CoworkerCard";
 
 const TodayShifts = () => {
+    const date = new Date();
+    const [shiftObj, setShiftObj] = useState([]);
 
+    const userString = localStorage.getItem('user');
+    const userObject = userString ? JSON.parse(userString) : null;
+
+    const today = format(date, 'MM/dd/yyy');
+    useEffect(() => {
+        const baseUrl = process.env.REACT_APP_BASE_API_URL;
+
+        const getCoWorker = async () => {
+            try {
+                const response = await axios.get(
+                    baseUrl + `/api/employee/get-co-worker?employeeID=${userObject.id}&employeeName=${userObject.name}&department_name=${userObject.department[0].name}&date=${today}`
+                );
+                setShiftObj(response?.data?.message);
+            } catch (error) {
+                console.error('No shifts found today!');
+            }
+        }
+        getCoWorker();
+    }, []);
 
     return (
         <>
         <Navigation />
         <div className="container mt-5">
-            <div className="row">
-                <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                    <div class="card border-dark mb-3">
-                        <div class="card-header">C1-CA TEST</div>
-                        <div class="card-body text-dark">
-                            <h5 class="card-title">3:35 - 3:45</h5>
-                            <p class="card-text">Quang</p>
-                            <p class="card-text">Quang</p>
-                            <p class="card-text">Quang</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+            {shiftObj.map((item) => {
+                return <CoworkerCard
+                    shiftName={item.shiftKey}
+                    schedule={item.time}
+                    employees={item.info}
+                />
+            })}            
 
         </div>
         </>
