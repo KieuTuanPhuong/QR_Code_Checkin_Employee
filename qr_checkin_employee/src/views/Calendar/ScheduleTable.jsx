@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
-
+import WorkingIcon from "../../assets/working-icon.png"
 import Calendar from 'react-calendar';
 import "react-calendar/dist/Calendar.css";
 import "./calendar.css";
 import axios from 'axios';
-// import { format } from "date-fns-tz";
+import { format, toDate, formatISO } from 'date-fns';
 import { shiftType } from '../../assets/data/data';
 
 import Navigation from '../../components/Navigation/Navigation';
@@ -16,8 +16,7 @@ const ScheduleTable = (props) => {
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [employeeData, setEmployeeData] = useState(null);
     const [FormState, setFormState] = useState(false);
-    const [addShiftFormState, setAddShiftFormState] = useState(true);
-    const [inforShiftFormState, setInforShiftFormState] = useState(false);
+    const [inforShiftFormState, setInforShiftFormState] = useState(true);
     const [selectedDate, setSelectedDate] = useState("");
     const [dateFormDb, setDateFormDb] = useState("")
     const [loading, setLoading] = useState(false);
@@ -45,18 +44,18 @@ const ScheduleTable = (props) => {
     const {
         user: { id: userID }
     } = useContext(AuthContext)
-    
+
     const baseUrl = process.env.REACT_APP_BASE_API_URL;
-    
+
     const userString = localStorage.getItem('user');
     const userObject = userString ? JSON.parse(userString) : null;
-    
+
     const fetchScheduleEmployyee = async () => {
-        
+
         try {
             const response = await axios.get(
                 // baseUrl + `/api/employee/get-schedules?employeeID=${userID}&employeeName=${userObject.name}`,
-                baseUrl + `/api/employee/get-schedules?employeeID=QIB&employeeName=Quanginhabertest&department_name=C1`,
+                baseUrl + `/api/employee/get-schedules?employeeID=${userObject?.id}&employeeName=${userObject?.name}`,
                 { withCredentials: true }
             );
             setScheduleEmployee(response.data);
@@ -99,26 +98,24 @@ const ScheduleTable = (props) => {
         fetchScheduleEmployyee();
 
         const fetchScheduleDataByDate = async () => {
-            if (userObject?.role === "Inhaber") {
-                try {
-                    const year = selectedDate.substring(0, 4);
-                    const month = selectedDate.substring(5, 7);
-                    const day = selectedDate.substring(8, 10)
-                    const date = `${month}/${day}/${year}`
-                    const response = await axios.get(
-                        baseUrl + `/api/inhaber/manage-date-design/get-by-specific?employeeID=${id}&year=${year}&month=${month}&date=${date}&inhaber_name=${userObject?.name}`,
-                        { withCredentials: true }
-                    );
+            try {
+                const year = selectedDate.substring(0, 4);
+                const month = selectedDate.substring(5, 7);
+                const day = selectedDate.substring(8, 10)
+                const date = `${month}/${day}/${year}`
+                const response = await axios.get(
+                    baseUrl + `/api/employee/get-schedules?employeeID=${userObject?.id}&employeeName=${userObject?.name}&date=${date}`,
+                    { withCredentials: true }
+                );
 
-                    setScheduleDataByDate(response.data.message);
-                } catch (error) {
-                    if (error.response && error.response.status) {
-                        if (error.response.status === 404) {
-                            setScheduleDataByDate([])
-                        }
-                    } else {
-                        console.error("Error fetching schedule data:", error.message);
+                setScheduleDataByDate(response.data.message);
+            } catch (error) {
+                if (error.response && error.response.status) {
+                    if (error.response.status === 404) {
+                        setScheduleDataByDate([])
                     }
+                } else {
+                    console.error("Error fetching schedule data:", error.message);
                 }
             }
         };
@@ -149,16 +146,16 @@ const ScheduleTable = (props) => {
                 {/* You can customize the content of the tile here */}
                 {dataForDate?.length > 0 ? (
                     dataForDate.map(({ departmentName, shiftCode, position, end_time, start_time }, index) => (
-                        <div key={index} className="d-flex flex-column gap-2 border-secondary py-2 rounded-3 mt-2 bg-light align-items-center justify-content-center fw-bold">
-                            <div className='d-flex flex-row gap-2'>
-                                <div className="border border-danger bg-danger ms-2 rounded-circle" style={{ width: "0.6rem", height: "0.6rem" }}></div>
-                                <div className="text-dark">{departmentName}: {shiftCode}-{position}</div>
+                        <div key={index} className="d-flex flex-column gap-2 py-2 mt-2 align-items-center justify-content-center fw-bold">
+                            <div className='d-flex flex-row gap-2 align-items-center justify-content-center'>
+                                <img src={WorkingIcon} />
+                                {/* <div className="text-dark">{departmentName}: {shiftCode}-{position}</div> */}
                             </div>
-                            <div className="text-dark">({start_time}-{end_time})</div>
+                            {/* <div className="text-dark">({start_time}-{end_time})</div> */}
                         </div>
                     ))
                 ) : (
-                    <div></div>
+                    <div className='text-black fs-6 text'>x</div>
                 )}
             </div>
         );
@@ -222,24 +219,23 @@ const ScheduleTable = (props) => {
         }
     }
 
-    // const handleClickDay = (value, event) => {
+    const handleClickDay = (value, event) => {
 
-    //     setFormState(true);
+        setFormState(true);
 
-    //     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    //     // const localDate = format(value, "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", { timeZone });
-    //     const localDate = timeZone;
-    //     const inputDate = new Date(localDate);
-    //     const outputDateFormDb = inputDate.toISOString();
-    //     setSelectedDate(localDate);
-    //     setDateFormDb(outputDateFormDb);
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const localDate = format(value, "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", { timeZone });
+        const inputDate = new Date(localDate);
+        const outputDateFormDb = inputDate.toISOString();
+        setSelectedDate(localDate);
+        setDateFormDb(outputDateFormDb);
 
-    //     console.log("Selected date:", localDate);
-    //     console.log("loclDate", localDate);
-    //     console.log("dateformDB", dateFormDb);
+        console.log("Selected date:", localDate);
+        console.log("loclDate", localDate);
+        console.log("dateformDB", dateFormDb);
 
-    //     setSelectedShift(null)
-    // };  
+        setSelectedShift(null)
+    };
 
     return (
         <>
@@ -249,7 +245,7 @@ const ScheduleTable = (props) => {
                 {selectedYear && (
                     <Calendar
                         onChange={handleMonthChange}
-                        // onClickDay={handleClickDay}
+                        onClickDay={handleClickDay}
                         value={selectedMonth}
                         view="month"
                         showNeighboringMonth={false}
@@ -257,233 +253,70 @@ const ScheduleTable = (props) => {
                     />
                 )}
 
-                {/* //---------------------------------------------------------------- ADD SHIFT FOR EMPLOYEE ----------------------------------------------------------------// */}
-                {FormState && (<div className="fixed top-0 bottom-0 right-0 left-0 z-20 font-Changa">
-                    <div
-                        onClick={() => setFormState(false)}
-                        className="absolute top-0 bottom-0 right-0 left-0 bg-[rgba(0,0,0,.45)] cursor-pointer"></div>
-                    <div className="absolute w-[750px] top-0 right-0 bottom-0 z-30 bg-white">
-                        <div className="w-full h-full">
-                            <div className="flex flex-col mt-8">
-                                <div className="flex flex-row justify-between px-8 items-center">
-                                    <div className="flex flex-row items-center gap-4">
+                {FormState && (
+                    <div className="top-0 bottom-0 right-0 left-0 z-20 font-Changa">
+                        <div
+                            onClick={() => setFormState(false)}
+                            className="position-absolute top-0 bottom-0 right-0 left-0 bg-overlay cursor-pointer"></div>
+                        <div className="position-absolute w-100 top-0 right-0 bottom-0 z-30 bg-white">
+                            <div className="w-100 h-100">
+                                <div className="d-flex flex-column mt-8">
+                                    <div className="d-flex justify-content-between px-8 align-items-center">
                                         <div
-                                            onClick={() => {
-                                                setAddShiftFormState(true)
-                                                setInforShiftFormState(false)
-                                            }}
-                                            className={`cursor-pointer font-bold text-xl ${addShiftFormState ? "text-buttonColor1 underline decoration-buttonColor1" : ""}`}>Add Shift</div>
-                                        <div
-                                            onClick={() => {
-                                                setAddShiftFormState(false)
-                                                setInforShiftFormState(true)
-                                            }}
-                                            className={`cursor-pointer font-bold text-xl ${inforShiftFormState ? "text-buttonColor1 underline decoration-buttonColor1" : ""}`}>Shift Information</div>
+                                            onClick={() => setFormState(false)}
+                                            className="fs-5 border border-solid border-overlay py-1 px-3 rounded-circle cursor-pointer">x</div>
                                     </div>
-                                    <div
-                                        onClick={() => setFormState(false)}
-                                        className="text-lg border border-solid border-[rgba(0,0,0,.45)] py-1 px-3 rounded-full cursor-pointer">x</div>
-                                </div>
-                                <div className="w-full border border-solid border-t-[rgba(0,0,0,.45)] mt-4"></div>
-                                {addShiftFormState && (<div className="flex flex-col px-8 w-full mt-7">
-                                    <form
-                                        className="flex flex-col gap-6 w-full justify-center items-center"
-                                        onSubmit={handleSubmit}>
-                                        {loading && (<div className="absolute flex w-full h-full items-center justify-center">
-                                            <div className="loader"></div>
-                                        </div>)}
-                                        <div className="w-full flex flex-col gap-2">
-                                            <div className="flex flex-row gap-2">
-                                                <span className="text-rose-500">*</span>
-                                                <span className="">Shift Code</span>
+                                    {/* Shift Information */}
+                                    {inforShiftFormState && (
+                                        <div className="d-flex flex-column px-8 w-100 mt-7 gap-2 font-Changa text-textColor">
+                                            <div className="font-weight-bold fs-3">Shift Information</div>
+                                            <div className="d-flex flex-row gap-3">
+                                                {scheduleDataByDate?.length === 0 ? (
+                                                    <div className="font-weight-bold text-danger fs-5">No shift for this day</div>
+                                                ) : (
+                                                    scheduleDataByDate?.map((item) => (
+                                                        <div key={item._id} className="d-flex flex-row gap-4">
+                                                            <span className={`cursor-pointer ${selectedShift === item.shift_code ? 'text-primary text-decoration-underline' : ''}`} onClick={() => handleShiftClick(item?.shift_code)}>
+                                                                {item?.shift_code}
+                                                            </span>
+                                                        </div>
+                                                    ))
+                                                )}
                                             </div>
-                                            <select
-                                                id="department"
-                                                name="department"
-                                                className="w-full cursor-pointer"
-                                                value={selectedShiftAddShiftForm}
-                                                onChange={(e) => setSelectedShiftAddShiftForm(e.target.value)}
-                                                required
-                                            >
-                                                <option value="" disabled className='italic text-sm'>Select Shift Code*</option>
-                                                {shiftList?.map((item, index) => (
-                                                    <option className='text-sm text-textColor w-full' key={index} value={item.code}>
-                                                        {item.code}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="w-full flex flex-col gap-2">
-                                            <div className="flex flex-row gap-2">
-                                                <span className="text-rose-500">*</span>
-                                                <span className="">Position</span>
-                                            </div>
-                                            <select
-                                                id="department"
-                                                name="department"
-                                                className="w-full cursor-pointer"
-                                                value={selectedPositionEmployee}
-                                                onChange={(e) => setSelectedPositionEmployee(e.target.value)}
-                                                required
-                                            >
-                                                <option value="" disabled className='italic text-sm'>Select Position*</option>
-                                                {employeeData.message[0]?.department
-                                                    ?.filter((item) => item.name === selectedDepartmentEmployee)
-                                                    .map((dept) =>
-                                                        dept.position.map((item, index) => (
-                                                            <option className='text-sm text-textColor w-full' key={index} value={item}>
-                                                                {item}
-                                                            </option>
-                                                        ))
-                                                    )}
-                                            </select>
-                                        </div>
-                                        <div className="w-full h-auto flex flex-col gap-2">
-                                            <div className="flex flex-row gap-2">
-                                                <span className="text-rose-500">*</span>
-                                                <span className="">Dates</span>
-                                            </div>
-                                            <input
-                                                type="text"
-                                                name="dates"
-                                                required
-                                                value={formData.data?.dates?.join(",")}
-                                                onChange={handleChange}
-                                                placeholder="Enter date (format: MM/DD/YYYY) and separate by commas ..."
-                                            />
-                                        </div>
-                                        <div className="w-full flex flex-col gap-2">
-                                            <div className="flex flex-row gap-2">
-                                                <span className="text-rose-500">*</span>
-                                                <span className="">Shift Type</span>
-                                            </div>
-                                            <select
-                                                id="shift-type"
-                                                name="shift-type"
-                                                className="w-full cursor-pointer"
-                                                value={selectedShiftType}
-                                                onChange={(e) => setSelectedShiftType(e.target.value)}
-                                                required
-                                            >
-                                                <option value="" disabled className='italic text-sm'>Select Shift Type*</option>
-                                                {shiftType?.map((item, index) => (
-                                                    <option className='text-sm text-textColor w-full' key={index} value={item.name}>
-                                                        {item.name}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-
-                                        <div
-                                            className=" bg-buttonColor2 text-white text-base flex flex-row gap-1 justify-center items-center border border-solid py-3 rounded-md cursor-pointer hover:bg-emerald-700 w-full">
-                                            <button type="submit" className="w-full">Add</button>
-                                        </div>
-                                    </form>
-                                </div>)}
-                                {/* //----------------------------------------------------------------  SHIFT INFORMATION ----------------------------------------------------------------// */}
-                                {inforShiftFormState && (<div className="flex flex-col px-8 w-full mt-7 gap-2 font-Changa text-textColor">
-                                    <div className="font-bold text-2xl">Shift Information</div>
-                                    <div className="flex flex-row gap-3">
-                                        {scheduleDataByDate?.length === 0 ? (
-                                            <div className="font-bold text-red-600 text-xl">No shift for this day</div>
-                                        ) : (
-                                            scheduleDataByDate?.map((item) => (
-                                                <div key={item._id} className="flex flex-row gap-4">
-                                                    <span className={`cursor-pointer ${selectedShift === item.shift_code ? 'text-buttonColor1 underline decoration-buttonColor1' : ''}`} onClick={() => handleShiftClick(item?.shift_code)}>
-                                                        {item?.shift_code}
-                                                    </span>
-                                                </div>
-                                            ))
-                                        )}
-                                    </div>
-                                    {selectedShift && (
-                                        <div>
-                                            {attendanceDataByDate
-                                                ?.filter((item) => item?.shift_info?.shift_code === selectedShift)
-                                                .map((filteredItem) => (
-                                                    <div key={filteredItem._id}>
-                                                        {filteredItem?.status === "missing" ? (
-                                                            <div className="text-center font-bold text-red-600 text-xl" key={filteredItem._id}>STATUS: MISSING</div>
-                                                        ) : (
-                                                            <div className="flex flex-col gap-4">
-                                                                <div className="flex flex-row justify-between mt-5">
-                                                                    <div className="flex flex-col justify-center items-center text-buttonColor2 font-bold text-xl">
-                                                                        <div>CHECKIN TIME</div>
-                                                                        <div>{filteredItem?.shift_info?.time_slot?.check_in_time}</div>
-                                                                    </div>
-                                                                    <div className="flex flex-col justify-center items-center text-buttonColor1 font-bold text-xl">
-                                                                        <div>WORKING TIME</div>
-                                                                        <div>{`${filteredItem?.shift_info?.total_hour}h ${filteredItem?.shift_info?.total_minutes}m`}</div>
-                                                                    </div>
-                                                                    <div className="flex flex-col justify-center items-center font-bold text-red-600 text-xl">
-                                                                        <div>CHECKOUT TIME</div>
-                                                                        <div>{filteredItem?.shift_info?.time_slot?.check_out_time}</div>
-                                                                    </div>
+                                            <div className="w-100 border border-solid border-overlay mt-4"></div>
+                                            {selectedShift && (
+                                                <div>
+                                                    {scheduleDataByDate
+                                                        ?.filter((item) => item?.shift_code === selectedShift)
+                                                        .map((filteredItem) => (
+                                                            <div className="w-100 d-flex flex-column justify-content-center align-items-center gap-3 mt-3 fs-base">
+                                                                <div className="d-flex flex-wrap w-100 justify-content-center align-items-center">
+                                                                    <span className="text-secondary w-1/3 text-end pe-3">Department</span>
+                                                                    <span className="w-2/3">{filteredItem?.department_name}</span>
                                                                 </div>
-                                                                {filteredItem?.position === "Autofahrer" ? (<div className="flex flex-row justify-between mt-5">
-                                                                    <div className="flex flex-col justify-center items-center text-buttonColor2 font-bold text-xl">
-                                                                        <div>CHECKIN KM</div>
-                                                                        <div>{filteredItem?.check_in_km}</div>
-                                                                    </div>
-                                                                    <div className="flex flex-col justify-center items-center text-buttonColor1 font-bold text-xl">
-                                                                        <div>TOTAL KM TIME</div>
-                                                                        <div>{filteredItem?.total_km}</div>
-                                                                    </div>
-                                                                    <div className="flex flex-col justify-center items-center font-bold text-red-600 text-xl">
-                                                                        <div>CHECKOUT KM</div>
-                                                                        <div>{filteredItem?.check_out_km}</div>
-                                                                    </div>
-                                                                </div>) : (<div></div>)}
+                                                                <div className="d-flex flex-wrap w-100 justify-content-center align-items-center">
+                                                                    <span className="text-secondary w-1/3 text-end pe-3">Position</span>
+                                                                    <span className="w-2/3">{filteredItem?.position}</span>
+                                                                </div>
+                                                                <div className="d-flex flex-wrap w-100 justify-content-center align-items-center">
+                                                                    <span className="text-secondary w-1/3 text-end pe-3">Date</span>
+                                                                    <span className="w-2/3">{selectedDate.substring(0, 10)}</span>
+                                                                </div>
+                                                                <div className="d-flex flex-wrap w-100 justify-content-center align-items-center">
+                                                                    <span className="text-secondary w-1/3 text-end pe-3">Shift's Code</span>
+                                                                    <span className="w-2/3">{selectedShift}</span>
+                                                                </div>
                                                             </div>
-                                                        )}
-                                                    </div>
-                                                ))}
+                                                        ))}
+                                                </div>
+                                            )}
                                         </div>
                                     )}
-                                    <div className="w-full border border-solid border-t-[rgba(0,0,0,.10)] mt-4"></div>
-                                    {selectedShift && (
-                                        <div>
-                                            {scheduleDataByDate
-                                                ?.filter((item) => item?.shift_code === selectedShift)
-                                                .map((filteredItem) => (
-                                                    <div className="w-full flex flex-col justify-center items-center gap-3 mt-3 text-base">
-                                                        <div className="flex flex-wrap w-full items-center justify-center">
-                                                            <span className="text-[#6c757d] w-1/3 text-right px-3">Employee's Name</span>
-                                                            <span className="w-2/3">{name}</span>
-                                                        </div>
-                                                        <div className="flex flex-wrap w-full items-center justify-center">
-                                                            <span className="text-[#6c757d] w-1/3 text-right px-3">Employee's ID</span>
-                                                            <span className="w-2/3">{id}</span>
-                                                        </div>
-                                                        <div className="flex flex-wrap w-full items-center justify-center">
-                                                            <span className="text-[#6c757d] w-1/3 text-right px-3">Department</span>
-                                                            <span className="w-2/3">{filteredItem?.department_name}</span>
-                                                        </div>
-                                                        <div className="flex flex-wrap w-full items-center justify-center">
-                                                            <span className="text-[#6c757d] w-1/3 text-right px-3">Role</span>
-                                                            <span className="w-2/3">{role}</span>
-                                                        </div>
-                                                        <div className="flex flex-wrap w-full items-center justify-center">
-                                                            <span className="text-[#6c757d] w-1/3 text-right px-3">Position</span>
-                                                            <span className="w-2/3">{filteredItem?.position}</span>
-                                                        </div>
-                                                        <div className="flex flex-wrap w-full items-center justify-center">
-                                                            <span className="text-[#6c757d] w-1/3 text-right px-3">Date</span>
-                                                            <span className="w-2/3">{selectedDate.substring(0, 10)}</span>
-                                                        </div>
-                                                        <div className="flex flex-wrap w-full items-center justify-center">
-                                                            <span className="text-[#6c757d] w-1/3 text-right px-3">Shift's Code</span>
-                                                            <span className="w-2/3">{selectedShift}</span>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                        </div>
-                                    )}
-                                </div>)}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>)}
+                )}
             </div>
         </>
     );
