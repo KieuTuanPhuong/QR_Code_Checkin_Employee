@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import axios from "axios";
-import { format } from "date-fns/format";
+import { format } from "date-fns";
 
 import { AuthContext } from "../../context/AuthContext";
 import Navigation from "../../components/Navigation/Navigation";
