@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { format } from "date-fns/format";
+import { format } from "date-fns";
 
 
 import Navigation from "../../components/Navigation/Navigation";
