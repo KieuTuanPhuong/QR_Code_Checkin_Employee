@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 import CarForm from "../CarForm/CarForm";
 import LitoForm from "../LitoForm/LitoForm";
 import ServiceForm from "../ServiceForm/ServiceForm";
+import ServiceFormForgot from "../ServiceForm/ServiceFormForgot";
+import LitoFormForgot from "../LitoForm/LitoFormForgot";
+import CarFormForget from "../CarForm/CarFormForget";
 
 const ScanQR = () => {
   const {
@@ -16,8 +19,11 @@ const ScanQR = () => {
 
   const [position, setPosition] = useState();
   const [attendanceID, setAttendanceID] = useState();
+  const [departmentCar, setDepartmentCar] = useState();
+  const [positionForgot, setPositionForgot] = useState();
+  const [attendanceIdForgot, setAttendanceIdForgot] = useState();
   const [isCheckout, setIsCheckout] = useState();
-
+  const [checkout, setCheckout] = useState();
   const baseUrl = process.env.REACT_APP_BASE_API_URL;
 
   const userString = localStorage.getItem('user');
@@ -35,8 +41,15 @@ const ScanQR = () => {
         );
 
         const attendanceHistory = response?.data?.message;
-
         const todayAttend = attendanceHistory.filter(item => item.date === todayISO);
+        console.log(attendanceHistory);
+        const forgotCheckAttendance = attendanceHistory.filter(item => item?.isAuto == true)
+        if (forgotCheckAttendance) {
+          console.log(forgotCheckAttendance);
+          setCheckout(false)
+          setPositionForgot(forgotCheckAttendance[0]?.position)
+          setAttendanceIdForgot(forgotCheckAttendance[0]?._id)
+        }
         if (todayAttend.shift_info?.time_slot?.check_out_status === 'on time') {
           setIsCheckout(true);
         }
@@ -60,6 +73,9 @@ const ScanQR = () => {
           const currentTimestamp = new Date();
 
           const expectedQRDataArray = department.map(dept => `QR code for department ${dept.name}`);
+          console.log(expectedQRDataArray);
+          console.log(departmentFromQR);
+          console.log(expectedQRDataArray.includes(departmentFromQR));
           if (expectedQRDataArray.includes(departmentFromQR)) {
             const timeDifference = currentTimestamp - timestampFromQR;
             if (timeDifference >= 0 && timeDifference <= 20000) {
@@ -74,6 +90,7 @@ const ScanQR = () => {
                 if (res?.data?.message?.position === 'Autofahrer') {
                   setPosition('Autofahrer');
                   setAttendanceID(res?.data?.message?._id);
+                  setDepartmentCar(res?.data?.message?.department_name)
                 }
                 if (res?.data?.message?.shift_info?.time_slot?.check_out) {
                   setIsCheckout(res?.data?.message?.shift_info?.time_slot?.check_out);
@@ -125,6 +142,7 @@ const ScanQR = () => {
         position={position}
         attendance_id={attendanceID}
         check_out={isCheckout}
+        departmentCar={departmentCar}
       />
       <LitoForm
         position={position}
@@ -135,40 +153,23 @@ const ScanQR = () => {
         attendance_id={attendanceID}
       />
 
+      <ServiceFormForgot
+        positionForgot={positionForgot}
+        attendance_id_forgot={attendanceIdForgot}
+      />
+
+      <LitoFormForgot
+        positionForgot={positionForgot}
+        attendance_id_forgot={attendanceIdForgot}
+      />
+
+      <CarFormForget
+        positionForgot={positionForgot}
+        attendance_id_forgot={attendanceIdForgot}
+      />
       {/* <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#departmentSelect">
       Launch static backdrop modal
     </button> */}
-
-      <div
-        style={{ display: position ? 'block' : 'none' }}
-        className={`modal fade ${position ? 'show' : ''}`}
-        id="departmentSelect" data-bs-backdrop="static"
-        data-bs-keyboard="false" tabIndex="-1"
-        aria-labelledby="departmentSelectLabel" aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="departmentSelectLabel">Select department</h1>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body">
-              <select
-                className="form-select"
-                aria-label="Default select example"
-              >
-                <option defaultValue={null}>Open this select menu</option>
-                <option value="1">C1</option>
-                <option value="2">C2</option>
-                <option value="3">C2</option>
-              </select>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-primary">OK</button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

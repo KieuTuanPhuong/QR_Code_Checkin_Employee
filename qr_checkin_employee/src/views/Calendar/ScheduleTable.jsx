@@ -119,7 +119,9 @@ const ScheduleTable = (props) => {
                 }
             }
         };
-        fetchScheduleDataByDate();
+        if (selectedDate !== "") {
+            fetchScheduleDataByDate();
+        }
     }, [id, selectedDate, dateFormDb, role, userObject?.role]);
 
     if (shiftDataByDate) {
@@ -254,19 +256,19 @@ const ScheduleTable = (props) => {
                 )}
 
                 {FormState && (
-                    <div className="top-0 bottom-0 right-0 left-0 z-20 font-Changa">
+                    <div className="font-Changa mt-4">
                         <div
                             onClick={() => setFormState(false)}
-                            className="position-absolute top-0 bottom-0 right-0 left-0 bg-overlay cursor-pointer"></div>
-                        <div className="position-absolute w-100 top-0 right-0 bottom-0 z-30 bg-white">
-                            <div className="w-100 h-100">
+                            className="bg-overlay cursor-pointer"></div>
+                        <div className="w-100 bg-white">
+                            <div className="card border-dark mb-3 px-3 py-1">
                                 <div className="d-flex flex-column mt-8">
                                     <div className="d-flex justify-content-between px-8 align-items-center">
+                                        <div></div>
                                         <div
                                             onClick={() => setFormState(false)}
-                                            className="fs-5 border border-solid border-overlay py-1 px-3 rounded-circle cursor-pointer">x</div>
+                                            className="fs-5 py-1 px-3 cursor-pointe right-0">x</div>
                                     </div>
-                                    {/* Shift Information */}
                                     {inforShiftFormState && (
                                         <div className="d-flex flex-column px-8 w-100 mt-7 gap-2 font-Changa text-textColor">
                                             <div className="font-weight-bold fs-3">Shift Information</div>
@@ -283,28 +285,31 @@ const ScheduleTable = (props) => {
                                                     ))
                                                 )}
                                             </div>
-                                            <div className="w-100 border border-solid border-overlay mt-4"></div>
                                             {selectedShift && (
                                                 <div>
                                                     {scheduleDataByDate
                                                         ?.filter((item) => item?.shift_code === selectedShift)
                                                         .map((filteredItem) => (
                                                             <div className="w-100 d-flex flex-column justify-content-center align-items-center gap-3 mt-3 fs-base">
-                                                                <div className="d-flex flex-wrap w-100 justify-content-center align-items-center">
+                                                                <div className="d-flex flex-wrap w-100 align-items-center">
                                                                     <span className="text-secondary w-1/3 text-end pe-3">Department</span>
                                                                     <span className="w-2/3">{filteredItem?.department_name}</span>
                                                                 </div>
-                                                                <div className="d-flex flex-wrap w-100 justify-content-center align-items-center">
+                                                                <div className="d-flex flex-wrap w-100 align-items-center">
                                                                     <span className="text-secondary w-1/3 text-end pe-3">Position</span>
                                                                     <span className="w-2/3">{filteredItem?.position}</span>
                                                                 </div>
-                                                                <div className="d-flex flex-wrap w-100 justify-content-center align-items-center">
+                                                                <div className="d-flex flex-wrap w-100 align-items-center">
                                                                     <span className="text-secondary w-1/3 text-end pe-3">Date</span>
                                                                     <span className="w-2/3">{selectedDate.substring(0, 10)}</span>
                                                                 </div>
-                                                                <div className="d-flex flex-wrap w-100 justify-content-center align-items-center">
+                                                                <div className="d-flex flex-wrap w-100 align-items-center">
                                                                     <span className="text-secondary w-1/3 text-end pe-3">Shift's Code</span>
                                                                     <span className="w-2/3">{selectedShift}</span>
+                                                                </div>
+                                                                <div className="d-flex flex-wrap w-100 align-items-center">
+                                                                    <span className="text-secondary w-1/3 text-end pe-3">Time</span>
+                                                                    <span className="w-2/3">{filteredItem?.time_slot?.start_time} ~ {filteredItem?.time_slot?.end_time}</span>
                                                                 </div>
                                                             </div>
                                                         ))}

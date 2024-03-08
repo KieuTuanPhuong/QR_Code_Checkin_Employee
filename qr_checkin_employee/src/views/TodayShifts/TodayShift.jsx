@@ -20,9 +20,10 @@ const TodayShifts = () => {
         const getCoWorker = async () => {
             try {
                 const response = await axios.get(
-                    baseUrl + `/api/employee/get-co-worker?employeeID=${userObject.id}&employeeName=${userObject.name}&date=${today}`
+                    baseUrl + `/api/employee/get-co-worker/get-by-date?date=${today}`
                 );
-                setShiftObj(response?.data?.message);
+                //console.log(response?.data?.data);
+                setShiftObj(response?.data?.data);
             } catch (error) {
                 console.error('No shifts found today!');
             }
@@ -34,11 +35,12 @@ const TodayShifts = () => {
         <>
         <Navigation />
         <div className="container mt-5">
-            {shiftObj.map((item) => {
+            {shiftObj?.map((item, index) => {
                 return <CoworkerCard
-                    shiftName={item.shiftKey}
-                    schedule={item.time}
-                    employees={item.info}
+                    key={index}
+                    department={item.department}
+                    shift_code={item.shift_code}
+                    employees={item.employees}
                 />
             })}            
 
