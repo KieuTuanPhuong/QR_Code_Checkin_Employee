@@ -43,7 +43,6 @@ const VacationRequest = () => {
             alert("Successfully sent the request!");
             setIsLoading(false);
         } catch (err) {
-            console.log(err);
             alert(err?.response?.data?.message);
             setIsLoading(false);
         }

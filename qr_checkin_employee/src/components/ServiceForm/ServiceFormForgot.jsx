@@ -48,8 +48,6 @@ const ServiceFormForgot = ( props ) => {
         } catch (error) {
             alert(error.response?.data?.message);
         }
-
-        console.log('Form submitted:', formData);
     };    
     
     return (
@@ -68,8 +66,10 @@ const ServiceFormForgot = ( props ) => {
             <div className="modal-dialog">
                 {/* Header */}
                 <div className="modal-content">
-                <div className="modal-header">
-                    <h1 className="modal-title fs-5" id="serviceFormLabel">Service</h1>
+                <div className="modal-header d-flex flex-column align-items-start">
+                    <h1 className="modal-title" id="litoFormLabel">Department { props.department }</h1>
+                    <h3 className="modal-title fs-5">Lito</h3>
+                    {/* <h3><span className="badge text-bg-success">{ props.time }</span></h3> */}
                 </div>
 
                 {/* Body */}

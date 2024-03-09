@@ -1,6 +1,5 @@
 const CoworkerCard = (props) => {
     const employees = props.employees;
-    console.log(employees);
     return (
         <>
             <div className="row">

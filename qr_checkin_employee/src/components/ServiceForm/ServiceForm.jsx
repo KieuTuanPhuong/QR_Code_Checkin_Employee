@@ -48,8 +48,6 @@ const ServiceForm = ( props ) => {
         } catch (error) {
             alert(error.response?.data?.message);
         }
-
-        console.log('Form submitted:', formData);
     };    
     
     return (

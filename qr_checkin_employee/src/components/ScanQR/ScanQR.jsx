@@ -23,7 +23,9 @@ const ScanQR = () => {
   const [positionForgot, setPositionForgot] = useState();
   const [attendanceIdForgot, setAttendanceIdForgot] = useState();
   const [isCheckout, setIsCheckout] = useState();
-  const [checkout, setCheckout] = useState();
+  const [attendObj, setAttendObj] = useState({});
+  const [cameraEnabled, setCameraEnabled] = useState(true);
+
   const baseUrl = process.env.REACT_APP_BASE_API_URL;
 
   const userString = localStorage.getItem('user');
@@ -42,13 +44,13 @@ const ScanQR = () => {
 
         const attendanceHistory = response?.data?.message;
         const todayAttend = attendanceHistory.filter(item => item.date === todayISO);
-        console.log(attendanceHistory);
-        const forgotCheckAttendance = attendanceHistory.filter(item => item?.isAuto == true)
-        if (forgotCheckAttendance) {
-          console.log(forgotCheckAttendance);
-          setCheckout(false)
-          setPositionForgot(forgotCheckAttendance[0]?.position)
-          setAttendanceIdForgot(forgotCheckAttendance[0]?._id)
+        const forgotCheckAttendance = attendanceHistory.filter(item => item?.isAuto == true);
+        if (forgotCheckAttendance != "") {
+          // debugger;
+          setAttendObj(forgotCheckAttendance[0]);
+          setPositionForgot(forgotCheckAttendance[0]?.position);
+          setAttendanceIdForgot(forgotCheckAttendance[0]?._id);
+          setCameraEnabled(false);
         }
         if (todayAttend.shift_info?.time_slot?.check_out_status === 'on time') {
           setIsCheckout(true);
@@ -73,9 +75,6 @@ const ScanQR = () => {
           const currentTimestamp = new Date();
 
           const expectedQRDataArray = department.map(dept => `QR code for department ${dept.name}`);
-          console.log(expectedQRDataArray);
-          console.log(departmentFromQR);
-          console.log(expectedQRDataArray.includes(departmentFromQR));
           if (expectedQRDataArray.includes(departmentFromQR)) {
             const timeDifference = currentTimestamp - timestampFromQR;
             if (timeDifference >= 0 && timeDifference <= 20000) {
@@ -130,14 +129,18 @@ const ScanQR = () => {
   return (
     <div className="scan-qr-container mt-3">
       <h2>Scan QR Code</h2>
-      <QrScanner
-        onScan={handleScan}
-        onError={handleError}
-        style={{ width: "100%" }}
-        key="environment"
-        constraints={{ audio: false, video: { facingMode: "environment" } }}
-      // constraints={{ audio: false, video: false }}
-      />
+      {cameraEnabled && (
+        <QrScanner
+          onScan={handleScan}
+          onError={handleError}
+          style={{ width: "100%" }}
+          key="environment"
+          constraints={{ 
+            audio: false, 
+            video: { facingMode: "environment" } 
+          }}
+        />
+      )}
       <CarForm
         position={position}
         attendance_id={attendanceID}
@@ -146,7 +149,7 @@ const ScanQR = () => {
       />
       <LitoForm
         position={position}
-        attendance_id={attendanceID}
+        attendance_id={attendanceID}        
       />
       <ServiceForm
         position={position}
@@ -156,16 +159,22 @@ const ScanQR = () => {
       <ServiceFormForgot
         positionForgot={positionForgot}
         attendance_id_forgot={attendanceIdForgot}
+        department={ attendObj.department_name }
+        // time={ attendObj.shift_info}
       />
 
       <LitoFormForgot
         positionForgot={positionForgot}
         attendance_id_forgot={attendanceIdForgot}
+        department={ attendObj.department_name }
+        // time={ attendObj.shift_info}
       />
 
       <CarFormForget
         positionForgot={positionForgot}
         attendance_id_forgot={attendanceIdForgot}
+        department={ attendObj.department_name }
+        // time={ attendObj.shift_info}
       />
       {/* <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#departmentSelect">
       Launch static backdrop modal

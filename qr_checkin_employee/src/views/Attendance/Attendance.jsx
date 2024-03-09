@@ -13,7 +13,6 @@ import { AuthContext } from '../../context/AuthContext';
 
 const Attendance = (props) => {
     const { id, name, departmentDefined, role } = props
-    console.log(departmentDefined);
     const [selectedYear, setSelectedYear] = useState(new Date());
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [employeeData, setEmployeeData] = useState(null);
@@ -142,10 +141,6 @@ const Attendance = (props) => {
         const outputDateFormDb = inputDate.toISOString();
         setSelectedDate(localDate);
         setDateFormDb(outputDateFormDb);
-
-        console.log("Selected date:", localDate);
-        console.log("loclDate", localDate);
-        console.log("dateformDB", dateFormDb);
 
         setSelectedShift(null)
     };

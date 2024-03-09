@@ -4,7 +4,6 @@ import { useState, useEffect, useContext } from "react";
 
 const CarForm = ( props ) => {
     const [selectedCartype, setSelectedCartype] = useState('company');
-    console.log(props);
     const handleCartypeChange = (event) => {
         setSelectedCartype(event.target.value);
         if (event.target.value === 'private') {
@@ -34,7 +33,6 @@ const CarForm = ( props ) => {
                     `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/get-car`,
                 );
                 const companyCarOptions = response?.data?.message.filter(item => item.car_name !== "PRIVATE" && item?.department_name?.includes(props.departmentCar));
-                console.log(companyCarOptions);
                 setCarOptions(companyCarOptions);
             } catch (error) {
                 console.error('Cannot get company cars!');
@@ -66,7 +64,6 @@ const CarForm = ( props ) => {
         event.preventDefault();
 
         try {
-            console.log('data:', formData);
             const response = await axios.post(
                 `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/update-attendance?attendanceID=${ props.attendance_id }`,
                 formData,

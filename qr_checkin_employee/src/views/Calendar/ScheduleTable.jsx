@@ -54,21 +54,14 @@ const ScheduleTable = (props) => {
 
         try {
             const response = await axios.get(
-                // baseUrl + `/api/employee/get-schedules?employeeID=${userID}&employeeName=${userObject.name}`,
                 baseUrl + `/api/employee/get-schedules?employeeID=${userObject?.id}&employeeName=${userObject?.name}`,
                 { withCredentials: true }
             );
             setScheduleEmployee(response.data);
-            // setShiftDataByDate(employeeData?.message[0]?.department?.map((item) => item?.schedules));
         } catch (error) {
             console.error("Error fetching employee data:", error);
         }
     };
-
-    // useEffect(() => {
-    //     setUserObject(userObject)
-    //     console.log(userObject);
-    // }, [])
 
     useEffect(() => {
         if (userObject?.role === 'Inhaber') {
@@ -86,7 +79,6 @@ const ScheduleTable = (props) => {
                         baseUrl + '/api/inhaber/manage-shift/get-all',
                         { withCredentials: true }
                     );
-                    // console.log(response.data.message);
                     setShiftList(response.data.message);
                 } catch (error) {
                     console.error('Error fetching data:', error);
@@ -231,10 +223,6 @@ const ScheduleTable = (props) => {
         const outputDateFormDb = inputDate.toISOString();
         setSelectedDate(localDate);
         setDateFormDb(outputDateFormDb);
-
-        console.log("Selected date:", localDate);
-        console.log("loclDate", localDate);
-        console.log("dateformDB", dateFormDb);
 
         setSelectedShift(null)
     };

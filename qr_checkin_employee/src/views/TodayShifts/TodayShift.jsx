@@ -22,7 +22,6 @@ const TodayShifts = () => {
                 const response = await axios.get(
                     baseUrl + `/api/employee/get-co-worker/get-by-date?date=${today}`
                 );
-                //console.log(response?.data?.data);
                 setShiftObj(response?.data?.data);
             } catch (error) {
                 console.error('No shifts found today!');
