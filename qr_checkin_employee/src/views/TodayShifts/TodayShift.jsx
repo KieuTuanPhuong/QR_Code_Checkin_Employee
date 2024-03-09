@@ -40,6 +40,7 @@ const TodayShifts = () => {
                     key={index}
                     department={item.department}
                     shift_code={item.shift_code}
+                    time={item.time}
                     employees={item.employees}
                 />
             })}            
