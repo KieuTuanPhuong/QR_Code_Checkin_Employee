@@ -52,9 +52,9 @@ const VacationRequest = () => {
         <>
             <Navigation />
             <div className="container p-4 mt-5">
-                <h4 className="mb-3">Request vacation form</h4>
+                <h4 className="mb-3">Urlaubsbeantragung</h4>
 
-                <label className="form-label">Start day</label>
+                <label className="form-label">Anfangsdatum</label>
                 <div className="mb-3">
                     <BootstrapDatepicker
                         wrapperClassName="datepicker"
@@ -66,7 +66,7 @@ const VacationRequest = () => {
                     />
                 </div>
 
-                <label className="form-label">End day</label>
+                <label className="form-label">Enddatum</label>
                 <div className="mb-3 w-100">
                     <BootstrapDatepicker
                         wrapperClassName="datepicker"
@@ -86,7 +86,7 @@ const VacationRequest = () => {
                         value="Holiday"
                         onChange={() => setType("Holiday")}
                     />
-                    <label className="btn btn-outline-primary" htmlFor="holidayOption">Holiday</label>
+                    <label className="btn btn-outline-primary" htmlFor="holidayOption">Urlaub</label>
 
                     <div className="vr m-1"></div>
 
@@ -97,7 +97,7 @@ const VacationRequest = () => {
                         value="Sick day"
                         onChange={() => setType("Sick day")}
                     />
-                    <label className="btn btn-outline-primary" htmlFor="sickdayOption">Sick day</label>
+                    <label className="btn btn-outline-primary" htmlFor="sickdayOption">Krankheitstage mit AU-Bescheinigung</label>
                 </div>
 
                 <div className="">
@@ -113,7 +113,7 @@ const VacationRequest = () => {
                             }
                         ></span>
                         <span name="loading" className={`${isLoading ? '' : 'd-none'}`} role="status">Sending...</span>
-                        <span name="submitBtn" className={`${isLoading ? 'd-none' : ''}`}>Send request</span>
+                        <span name="submitBtn" className={`${isLoading ? 'd-none' : ''}`}>Anfrage senden</span>
                     </button>
 
                     <RequestHistory />

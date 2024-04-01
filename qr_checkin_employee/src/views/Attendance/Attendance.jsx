@@ -153,7 +153,7 @@ const Attendance = (props) => {
         <>
             <Navigation />
             <div className="flex flex-col justify-center items-center w-full gap-4 font-Changa text-textColor mt-3">
-                <h2 className="text-2xl font-bold">Schedule Calendar</h2>
+                <h2 className="text-2xl font-bold">Zeitplan Kalender</h2>
                 {selectedYear && (
                     <Calendar
                         onChange={handleMonthChange}
@@ -204,7 +204,7 @@ const Attendance = (props) => {
                                                             ) : (
                                                                 <div className="w-100 d-flex flex-column justify-content-center align-items-center gap-3 mt-3 fs-base" key={filteredItem._id}>
                                                                     <div className="d-flex flex-wrap w-100 align-items-center">
-                                                                        <span className="text-secondary w-1/3 text-end pe-3">Department</span>
+                                                                        <span className="text-secondary w-1/3 text-end pe-3">Filiale</span>
                                                                         <span className="w-2/3">{filteredItem?.department_name}</span>
                                                                     </div>
                                                                     <div className="d-flex flex-wrap w-100 align-items-center">
@@ -216,7 +216,7 @@ const Attendance = (props) => {
                                                                         <span className="w-2/3">{selectedDate.substring(0, 10)}</span>
                                                                     </div>
                                                                     <div className="d-flex flex-wrap w-100 align-items-center">
-                                                                        <span className="text-secondary w-1/3 text-end pe-3">Shift's Code</span>
+                                                                        <span className="text-secondary w-1/3 text-end pe-3">Schicht's Code</span>
                                                                         <span className="w-2/3">{selectedShift}</span>
                                                                     </div>
                                                                     <div className="d-flex flex-wrap w-100 align-items-center">

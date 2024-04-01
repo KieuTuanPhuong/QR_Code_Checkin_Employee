@@ -122,7 +122,7 @@ const CarForm = ( props ) => {
                     </div>
 
                     <div className={selectedCartype !== "company" ? 'd-none' : ''}>
-                        <label className="form-label">Car name</label>
+                        <label className="form-label">Name</label>
                         <select 
                             className="form-select mb-3" 
                             name="car_name"

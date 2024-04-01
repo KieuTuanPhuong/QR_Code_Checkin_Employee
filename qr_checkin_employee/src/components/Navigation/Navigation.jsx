@@ -13,19 +13,19 @@ const Navigation = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <a className="nav-link" href="schedule">Schedule</a>
+                            <a className="nav-link" href="schedule">Zeitplan</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="attendance-history" >Attendance history</a>
+                            <a className="nav-link" href="attendance-history" >Anwesenheitshistorie</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="today-shifts" >Today shifts</a>
+                            <a className="nav-link" href="today-shifts" >Schichten</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="check-in" >Scan QR</a>
+                            <a className="nav-link" href="check-in" >QR Scannen</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="vacation-request" >Vacation request</a>
+                            <a className="nav-link" href="vacation-request" >Fehltage beantragen</a>
                         </li>
                     </ul>
                 </div>
