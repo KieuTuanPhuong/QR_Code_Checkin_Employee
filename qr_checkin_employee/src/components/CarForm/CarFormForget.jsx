@@ -51,7 +51,7 @@ const CarFormForget = ( props ) => {
                 {/* Header */}
                 <div className="modal-content">
                 <div className="modal-header d-flex flex-column align-items-start">
-                    <h1 className="modal-title" id="litoFormLabel">Department { props.department }</h1>
+                    <h1 className="modal-title" id="litoFormLabel">Filiale { props.department }</h1>
                     <h3 className="modal-title fs-5">Autofahrer</h3>
                     {/* <h3><span className="badge text-bg-success">{ props.time }</span></h3> */}
                 </div>

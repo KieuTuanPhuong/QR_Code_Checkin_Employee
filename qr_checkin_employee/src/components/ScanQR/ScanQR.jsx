@@ -128,7 +128,7 @@ const ScanQR = () => {
 
   return (
     <div className="scan-qr-container mt-3">
-      <h2>Scan QR Code</h2>
+      <h2>QR Scannen</h2>
       {cameraEnabled && (
         <QrScanner
           onScan={handleScan}

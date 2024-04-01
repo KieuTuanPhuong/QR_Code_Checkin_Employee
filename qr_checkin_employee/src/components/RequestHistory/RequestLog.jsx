@@ -66,11 +66,11 @@ const RequestLog = (request) => {
                     </small>
                 </div>
                 <div className="row">
-                    <p className="col-4">Start date:</p>
+                    <p className="col-4">Anfangsdatum:</p>
                     <p className="col-8" name="startDate">{ request.request_dayOff_start }</p>
                 </div>
                 <div className="row">
-                    <p className="col-4">End date:</p>
+                    <p className="col-4">Enddatum:</p>
                     <p className="col-8" name="endDate">{ request.request_dayOff_end }</p>
                 </div>
                 <div className="row">
