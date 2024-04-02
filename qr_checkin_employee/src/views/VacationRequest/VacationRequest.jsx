@@ -6,8 +6,8 @@ import { AuthContext } from "../../context/AuthContext";
 import Navigation from "../../components/Navigation/Navigation";
 import RequestHistory from "../../components/RequestHistory/RequestHistory";
 import BootstrapDatepicker from "../../components/BootstrapDatepicker/BootstrapDatepicker";
-import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import "./VacationRequest.css"
 
 const VacationRequest = () => {
 
@@ -16,11 +16,13 @@ const VacationRequest = () => {
     const [type, setType] = useState('Holiday');
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
+    const [requestImg, setRequestImg] = useState()
 
     const formData = {
         request_dayOff_start: format(startDate, 'MM/dd/yyyy'),
         request_dayOff_end: format(endDate, 'MM/dd/yyyy'),
         request_content: type,
+        image: requestImg,
     };
 
     const {
@@ -75,6 +77,11 @@ const VacationRequest = () => {
                         selected={endDate}
                         onChange={(date) => setEndDate(date)}
                     />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="formFile" className="form-label">Image</label>
+                    <input className="form-control" type="file" id="formFile" onChange={(img) => setRequestImg(img.target.files[0])}/>
                 </div>
 
                 <label className="form-label">Type</label>
