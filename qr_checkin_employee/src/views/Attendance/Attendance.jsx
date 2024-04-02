@@ -41,11 +41,10 @@ const Attendance = (props) => {
 
         try {
             const response = await axios.get(
-                baseUrl + `/api/employee/get-attendance?employeeID=${userID}&employeeName=${userObject.name}`,
+                baseUrl + `/api/employee/get-attendance/current-week?employeeID=${userObject?.id}&employeeName=${userObject?.name}`,
                 { withCredentials: true }
             );
             setScheduleEmployee(response.data);
-            // setShiftDataByDate(employeeData?.message[0]?.department?.map((item) => item?.schedules));
         } catch (error) {
             console.error("Error fetching employee data:", error);
         }
@@ -61,7 +60,7 @@ const Attendance = (props) => {
                 const day = selectedDate.substring(8, 10)
                 const date = `${month}/${day}/${year}`
                 const response = await axios.get(
-                    baseUrl + `/api/employee/get-attendance?employeeID=${userObject?.id}&employeeName=${userObject?.name}&date=${date}`,
+                    baseUrl + `/api/employee/get-attendance/current-week?employeeID=${userObject?.id}&employeeName=${userObject?.name}&date=${date}`,
                     { withCredentials: true }
                 );
 
@@ -82,10 +81,6 @@ const Attendance = (props) => {
         }
 
     }, [id, selectedDate, dateFormDb, role, userObject?.role]);
-
-    if (shiftDataByDate) {
-        console.log("sdfdfsfd", shiftDataByDate);
-    }
 
     const renderTileContent = ({ date }) => {
         if (!scheduleEmployee || !scheduleEmployee.message) return null;

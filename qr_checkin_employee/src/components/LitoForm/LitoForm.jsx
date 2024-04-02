@@ -130,7 +130,7 @@ const LitoForm = ( props ) => {
                                 value={ formData.gesamt_ligerbude }
                                 onChange={ handleInputChange }
                             />
-                            <label>Gesamt Liyerbude</label>
+                            <label>Gesamt Liferbude</label>
                         </div>
                         <div className="invalid-feedback">
                             This field is required.
@@ -146,7 +146,7 @@ const LitoForm = ( props ) => {
                                 value={ formData.gesamt_liegerando }
                                 onChange={ handleInputChange }
                             />
-                            <label>Gesamt Liyerando</label>
+                            <label>Gesamt Liferando</label>
                         </div>
                         <div className="invalid-feedback">
                             This field is required.
