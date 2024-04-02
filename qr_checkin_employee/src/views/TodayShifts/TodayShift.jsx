@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { format } from "date-fns";
 
-
 import Navigation from "../../components/Navigation/Navigation";
 import CoworkerCard from "../../components/CoworkerCard/CoworkerCard";
 
@@ -20,7 +19,7 @@ const TodayShifts = () => {
         const getCoWorker = async () => {
             try {
                 const response = await axios.get(
-                    baseUrl + `/api/employee/get-co-worker/get-by-date?date=${today}`
+                    baseUrl + `/api/employee/get-co-worker/get-by-date?date=${today}&employeeID=${userObject?.id}&employeeName=${userObject?.name}`
                 );
                 setShiftObj(response?.data?.data);
             } catch (error) {
@@ -33,18 +32,17 @@ const TodayShifts = () => {
     return (
         <>
         <Navigation />
-        <div className="container mt-5">
+        {shiftObj?.length === 0 ? (<div>No employees</div>) : (<div className="container mt-5">
             {shiftObj?.map((item, index) => {
                 return <CoworkerCard
                     key={index}
                     department={item.department}
-                    shift_code={item.shift_code}
-                    time={item.time}
-                    employees={item.employees}
+                    shifts={item.shifts}
+                    user={userObject}
                 />
-            })}            
+            })}
 
-        </div>
+        </div>)}
         </>
     );
 }
