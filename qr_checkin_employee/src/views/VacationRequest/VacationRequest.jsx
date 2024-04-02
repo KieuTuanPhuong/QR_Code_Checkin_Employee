@@ -60,7 +60,7 @@ const VacationRequest = () => {
                 <div className="mb-3">
                     <BootstrapDatepicker
                         wrapperClassName="datepicker"
-                        className="form-control"
+                        className="form-control requestInput"
                         dateFormat="dd/MM/yyyy"
                         name="request_dayOff_start"
                         selected={startDate}
@@ -72,7 +72,7 @@ const VacationRequest = () => {
                 <div className="mb-3 w-100">
                     <BootstrapDatepicker
                         wrapperClassName="datepicker"
-                        className="form-control w-100"
+                        className="form-control requestInput w-100"
                         dateFormat="dd/MM/yyyy"
                         selected={endDate}
                         onChange={(date) => setEndDate(date)}
@@ -81,7 +81,7 @@ const VacationRequest = () => {
 
                 <div className="mb-3">
                     <label htmlFor="formFile" className="form-label">Image</label>
-                    <input className="form-control" type="file" id="formFile" onChange={(img) => setRequestImg(img.target.files[0])}/>
+                    <input className="form-control requestInput" type="file" id="formFile" onChange={(img) => setRequestImg(img.target.files[0])}/>
                 </div>
 
                 <label className="form-label">Type</label>

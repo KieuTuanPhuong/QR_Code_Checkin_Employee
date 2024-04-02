@@ -48,7 +48,6 @@ const ScheduleTable = (props) => {
 
         try {
             const response = await axios.get(
-                // baseUrl + /api/employee/get-schedules?employeeID=${userID}&employeeName=${userObject.name},
                 baseUrl + `/api/employee/get-schedules?employeeID=${userObject?.id}&employeeName=${userObject?.name}`,
                 { withCredentials: true }
             );
