@@ -114,8 +114,7 @@ const ScanQR = () => {
           alert("Invalid QR code format.");
         }
       } catch (error) {
-        console.error("Error:", error);
-        alert("An error occurred.");
+        alert("An error occurred:", error);
       } finally {
         setAttendanceChecked(false);
       }
