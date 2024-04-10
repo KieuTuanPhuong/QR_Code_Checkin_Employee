@@ -73,7 +73,6 @@ const ScheduleTable = (props) => {
                         baseUrl + '/api/inhaber/manage-shift/get-all',
                         { withCredentials: true }
                     );
-                    // console.log(response.data.message);
                     setShiftList(response.data.message);
                 } catch (error) {
                     console.error('Error fetching data:', error);
@@ -109,11 +108,7 @@ const ScheduleTable = (props) => {
         if (selectedDate !== "") {
             fetchScheduleDataByDate();
         }
-    }, [id, selectedDate, dateFormDb, role, userObject?.role, userObject?.name, userObject?.role]);
-
-    if (shiftDataByDate) {
-        console.log("sdfdfsfd", shiftDataByDate);
-    }
+    }, [id, selectedDate, dateFormDb, role, userObject?.role, userObject?.name, userObject?.role]); 
 
     const renderTileContent = ({ date }) => {
         if (!scheduleEmployee || !scheduleEmployee.message) return null;
@@ -130,24 +125,26 @@ const ScheduleTable = (props) => {
                 end_time: schedule.time_slot.end_time,
             }));
 
-        return (
-            <div className={`font-Changa calendar-tile ${dataForDate?.length > 0 ? "scheduled" : ""}`}>
-                {/* You can customize the content of the tile here */}
-                {dataForDate?.length > 0 ? (
-                    dataForDate.map(({ departmentName, shiftCode, position, end_time, start_time }, index) => (
-                        <div key={index} className="d-flex flex-column gap-2 border-secondary py-2 mt-2 bg-light align-items-center justify-content-center fw-bold">
-                            <div className='d-flex flex-column gap-1'>
-                                <div className="text-dark">{departmentName}</div>
-                                <div className="text-dark">{shiftCode}</div>
+            return (
+                <div className={`font-Changa calendar-tile ${dataForDate?.length > 0 ? "scheduled" : ""}`}>
+                    {/* You can customize the content of the tile here */}
+                    {dataForDate?.length > 0 ? (
+                        dataForDate.map(({ status, departmentName, shiftCode, check_in_time, check_out_time, check_out_status, check_in_status, results }, index) => (
+                            <div key={index} className="d-flex flex-column gap-2 border-secondary py-2 mt-2 bg-light align-items-center justify-content-center fw-bold">
+                                {status === "missing" ? (<div className='text-danger'>missing</div>) :(<div>
+                                    <div className='d-flex flex-column gap-1'>
+                                        <div className="text-dark">{departmentName}</div>
+                                        <div className="text-dark">{shiftCode}</div>
+                                    </div>
+                                    <div className="text-dark">{check_in_time}-{check_out_time}</div>
+                                </div>)}
                             </div>
-                            <div className="text-dark">{start_time}-{end_time}</div>
-                        </div>
-                    ))
-                ) : (
-                    <div></div>
-                )}
-            </div>
-        );
+                        ))
+                    ) : (
+                        <div></div>
+                    )}
+                </div>
+            );
     };
 
     const handleMonthChange = (date) => {
@@ -164,10 +161,6 @@ const ScheduleTable = (props) => {
         const outputDateFormDb = inputDate.toISOString();
         setSelectedDate(localDate);
         setDateFormDb(outputDateFormDb);
-
-        console.log("Selected date:", localDate);
-        console.log("loclDate", localDate);
-        console.log("dateformDB", dateFormDb);
 
         setSelectedShift(null)
     };
