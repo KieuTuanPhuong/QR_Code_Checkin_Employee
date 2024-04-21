@@ -36,7 +36,8 @@ const Login = () => {
                 navigate("/schedule");
             }
         } catch (err) {
-            alert(err.response?.data?.message);
+            const errMsg = err.response?.data?.message + ' Invalid Username or Password!';
+            alert(errMsg);
             setIsLoading(false);
             dispatch({ type: "LOGIN_FAILURE", payload: "errr" });
         }
