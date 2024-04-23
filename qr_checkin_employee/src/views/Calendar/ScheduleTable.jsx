@@ -129,14 +129,14 @@ const ScheduleTable = (props) => {
                 <div className={`font-Changa calendar-tile ${dataForDate?.length > 0 ? "scheduled" : ""}`}>
                     {/* You can customize the content of the tile here */}
                     {dataForDate?.length > 0 ? (
-                        dataForDate.map(({ status, departmentName, shiftCode, check_in_time, check_out_time, check_out_status, check_in_status, results }, index) => (
+                        dataForDate.map(({ status, departmentName, shiftCode, start_time, end_time, check_out_status, check_in_status, results }, index) => (
                             <div key={index} className="d-flex flex-column gap-2 border-secondary py-2 mt-2 bg-light align-items-center justify-content-center fw-bold">
                                 {status === "missing" ? (<div className='text-danger'>missing</div>) :(<div>
                                     <div className='d-flex flex-column gap-1'>
                                         <div className="text-dark">{departmentName}</div>
                                         <div className="text-dark">{shiftCode}</div>
                                     </div>
-                                    <div className="text-dark">{check_in_time} ~ {check_out_time}</div>
+                                    <div className="text-dark">{start_time} ~ {end_time}</div>
                                 </div>)}
                             </div>
                         ))
