@@ -136,7 +136,7 @@ const ScheduleTable = (props) => {
                                         <div className="text-dark">{departmentName}</div>
                                         <div className="text-dark">{shiftCode}</div>
                                     </div>
-                                    <div className="text-dark">{check_in_time}-{check_out_time}</div>
+                                    <div className="text-dark">{check_in_time} ~ {check_out_time}</div>
                                 </div>)}
                             </div>
                         ))

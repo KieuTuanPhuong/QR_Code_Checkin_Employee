@@ -46,7 +46,6 @@ const ScanQR = () => {
         const todayAttend = attendanceHistory.filter(item => item.date === todayISO);
         const forgotCheckAttendance = attendanceHistory.filter(item => item?.isAuto == true);
         if (forgotCheckAttendance != "") {
-          // debugger;
           setAttendObj(forgotCheckAttendance[0]);
           setPositionForgot(forgotCheckAttendance[0]?.position);
           setAttendanceIdForgot(forgotCheckAttendance[0]?._id);
@@ -90,15 +89,18 @@ const ScanQR = () => {
                   setPosition('Autofahrer');
                   setAttendanceID(res?.data?.message?._id);
                   setDepartmentCar(res?.data?.message?.department_name)
+                  setCameraEnabled(false);
                 }
                 if (res?.data?.message?.shift_info?.time_slot?.check_out) {
                   setIsCheckout(res?.data?.message?.shift_info?.time_slot?.check_out);
                   if (res?.data?.message?.position === 'Lito') {
                     setPosition('Lito');
                     setAttendanceID(res?.data?.message?._id);
+                    setCameraEnabled(false);
                   } else if (res?.data?.message?.position === 'Service') {
                     setPosition('Service');
                     setAttendanceID(res?.data?.message?._id);
+                    setCameraEnabled(false);
                   }
                 }
               } else {
@@ -114,7 +116,7 @@ const ScanQR = () => {
           alert("Invalid QR code format.");
         }
       } catch (error) {
-        alert("An error occurred:", error);
+        alert("An error occurred:", error.response?.data?.message);
       } finally {
         setAttendanceChecked(false);
       }

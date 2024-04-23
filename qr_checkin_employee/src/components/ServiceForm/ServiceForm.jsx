@@ -44,7 +44,7 @@ const ServiceForm = ( props ) => {
                 formData,
             );
             alert("Successfully update checkout!");
-            navigate('schedule');
+            navigate('/schedule');
         } catch (error) {
             alert(error.response?.data?.message);
         }
