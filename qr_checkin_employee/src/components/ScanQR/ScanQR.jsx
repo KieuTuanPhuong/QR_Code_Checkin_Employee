@@ -31,6 +31,8 @@ const ScanQR = () => {
   const userString = localStorage.getItem('user');
   const userObject = userString ? JSON.parse(userString) : null;
 
+  const nav = useNavigate()
+  
   useEffect(() => {
     const date = new Date();
     date.setHours(0, 0, 0, 0);
@@ -119,6 +121,7 @@ const ScanQR = () => {
         alert("An error occurred:"+ error.response?.data?.message);
       } finally {
         setAttendanceChecked(false);
+        nav("/attendance-history")
       }
     }
   };
