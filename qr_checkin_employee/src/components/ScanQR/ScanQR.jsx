@@ -41,7 +41,7 @@ const ScanQR = () => {
     const getAttendanceHistory = async () => {
       try {
         const response = await axios.get(
-          baseUrl + `/api/employee/get-attendance/current-month?employeeID=${userObject.id}&employeeName=${userObject.name}`
+          baseUrl + `/api/employee/get-attendance?employeeID=${userObject.id}&employeeName=${userObject.name}`
         );
 
         const attendanceHistory = response?.data?.message;
