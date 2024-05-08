@@ -121,7 +121,7 @@ const ScanQR = () => {
         alert("An error occurred:"+ error.response?.data?.message);
       } finally {
         setAttendanceChecked(false);
-        nav("/attendance-history")
+        // nav("/attendance-history")
       }
     }
   };
