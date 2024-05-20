@@ -35,6 +35,7 @@ const ScheduleTable = (props) => {
     useEffect(() => {
         navigate("/schedule")
     }, [])
+    
     const {
         user: { id: userID }
     } = useContext(AuthContext)

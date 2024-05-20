@@ -43,7 +43,7 @@ const ScanQR = () => {
         const response = await axios.get(
           baseUrl + `/api/employee/get-attendance?employeeID=${userObject.id}&employeeName=${userObject.name}`
         );
-
+  
         const attendanceHistory = response?.data?.message;
         const todayAttend = attendanceHistory.filter(item => item.date === todayISO);
         const forgotCheckAttendance = attendanceHistory.filter(item => item?.isAuto == true);
@@ -63,6 +63,7 @@ const ScanQR = () => {
 
     getAttendanceHistory();
   }, []);
+
 
   const handleScan = async (data) => {
     if (data && !isAttendanceChecked) {
@@ -164,21 +165,18 @@ const ScanQR = () => {
         positionForgot={positionForgot}
         attendance_id_forgot={attendanceIdForgot}
         department={ attendObj.department_name }
-        // time={ attendObj.shift_info}
       />
 
       <LitoFormForgot
         positionForgot={positionForgot}
         attendance_id_forgot={attendanceIdForgot}
         department={ attendObj.department_name }
-        // time={ attendObj.shift_info}
       />
 
       <CarFormForget
         positionForgot={positionForgot}
         attendance_id_forgot={attendanceIdForgot}
         department={ attendObj.department_name }
-        // time={ attendObj.shift_info}
       />
       {/* <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#departmentSelect">
       Launch static backdrop modal
