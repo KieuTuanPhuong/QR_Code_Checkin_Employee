@@ -156,6 +156,7 @@ const LitoForm = ( props ) => {
 
                 {/* Footer */}
                 <div className="modal-footer">
+                    <a type="button" className="btn btn-secondary" href="/schedule">Close</a>
                     <button 
                         type="button" className="btn btn-secondary" 
                         data-bs-dismiss="modal"
