@@ -111,60 +111,62 @@ const CarForm = ( props ) => {
 
                 {/* Body */}
                 <div className="modal-body">
-                    <label className="form-label">Car type</label>
-                    <div className="form-check">
-                        <input className="form-check-input" type="radio" name="car_type" 
-                            value="company" 
-                            checked={selectedCartype === "company"} 
-                            onChange={handleCartypeChange}
-                            id="companyCar"
-                        />
-                        <label className="form-check-label" htmlFor="companyCar">
-                            Company
-                        </label>
-                    </div>
-                    <div className="form-check mb-3">
-                        <input className="form-check-input" type="radio" name="car_type" 
-                            value="private"
-                            checked={selectedCartype === "private"} 
-                            onChange={handleCartypeChange}
-                            id="privateCar"
-                        />
-                        <label className="form-check-label" htmlFor="privateCar">
-                            Private
-                        </label>
-                    </div>
-
-                    <div className={selectedCartype !== "company" ? 'd-none' : ''}>
-                        <label className="form-label">Name</label>
-                        <select 
-                            className="form-select mb-3" 
-                            name="car_name"
-                            onChange={ handleInputChange }
-                        >
-                            <option value="">Choose...</option>
-                            {carOptions?.map(option => (
-                                <option key={ option._id } value={ option.car_name }>
-                                    { option.car_name }
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
                     <div  className={`mb-3 ${ props.check_out ? 'd-none' : '' }`}>
-                        <label className="form-label">Number of kilometers (check-in)</label>
-                        <div className="input-group mb-3">
-                            <input 
-                                type="number" className="form-control" 
-                                placeholder="Enter number of kilometers" 
-                                name="check_in_km" 
-                                value={ formData.check_in_km }
-                                onChange={ handleInputChange }
+                        <label className="form-label">Car type</label>
+                        <div className="form-check">
+                            <input className="form-check-input" type="radio" name="car_type" 
+                                value="company" 
+                                checked={selectedCartype === "company"} 
+                                onChange={handleCartypeChange}
+                                id="companyCar"
                             />
-                            <span className="input-group-text" >kilometer(s)</span>
+                            <label className="form-check-label" htmlFor="companyCar">
+                                Company
+                            </label>
+                        </div>
+                        <div className="form-check mb-3">
+                            <input className="form-check-input" type="radio" name="car_type" 
+                                value="private"
+                                checked={selectedCartype === "private"} 
+                                onChange={handleCartypeChange}
+                                id="privateCar"
+                            />
+                            <label className="form-check-label" htmlFor="privateCar">
+                                Private
+                            </label>
+                        </div>
+
+                        <div className={selectedCartype !== "company" ? 'd-none' : ''}>
+                            <label className="form-label">Name</label>
+                            <select 
+                                className="form-select mb-3" 
+                                name="car_name"
+                                onChange={ handleInputChange }
+                            >
+                                <option value="">Choose...</option>
+                                {carOptions?.map(option => (
+                                    <option key={ option._id } value={ option.car_name }>
+                                        { option.car_name }
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div  className="">
+                            <label className="form-label">Number of kilometers (check-in)</label>
+                            <div className="input-group mb-3">
+                                <input 
+                                    type="number" className="form-control" 
+                                    placeholder="Enter number of kilometers" 
+                                    name="check_in_km" 
+                                    value={ formData.check_in_km }
+                                    onChange={ handleInputChange }
+                                />
+                                <span className="input-group-text" >kilometer(s)</span>
+                            </div>
                         </div>
                     </div>
-                    
+
                     <div className={`mb-3 ${ props.check_out ? '' : 'd-none' }`}>
                         <label className="form-label">Number of kilometers (check-out)</label>
                         <div className="input-group">

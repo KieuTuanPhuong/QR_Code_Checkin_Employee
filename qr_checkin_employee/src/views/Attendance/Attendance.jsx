@@ -98,6 +98,8 @@ const Attendance = (props) => {
                 check_out_status: schedule.shift_info.time_slot?.check_out_status,
                 status: schedule.status,
                 results: schedule.results,
+                check_in_km: schedule.check_in_km,
+                check_out_km: schedule.check_out_km,
             }));
 
         return (
@@ -222,6 +224,27 @@ const Attendance = (props) => {
                                                                         <span className="text-secondary w-1/3 text-end pe-3">Check out Time</span>
                                                                         <span className="w-2/3">{filteredItem?.shift_info?.time_slot?.check_out_time} ~ {filteredItem?.shift_info?.time_slot?.check_out_status}</span>
                                                                     </div>
+                                                                    {filteredItem?.position === "Autofahrer" ?
+                                                                        (
+                                                                            <div className="d-flex flex-wrap w-100 align-items-center">
+                                                                                <span className="text-secondary w-1/3 text-end pe-3">Check in km: </span>
+                                                                                <span className="w-2/3">{filteredItem?.check_in_km} km</span>
+                                                                            </div>
+                                                                        )
+                                                                        :
+                                                                        (<div></div>)
+                                                                    }
+
+                                                                    {filteredItem?.position === "Autofahrer" ?
+                                                                        (
+                                                                            <div className="d-flex flex-wrap w-100 align-items-center">
+                                                                                <span className="text-secondary w-1/3 text-end pe-3">Check out km: </span>
+                                                                                <span className="w-2/3">{filteredItem?.check_out_km} km</span>
+                                                                            </div>
+                                                                        )
+                                                                        :
+                                                                        (<div></div>)
+                                                                    }
                                                                     {filteredItem?.position === "Service" || filteredItem?.position === "Lito" ?
                                                                         (<div className="d-flex flex-wrap w-100 align-items-center">
                                                                             <span className="text-secondary w-1/3 text-end pe-3">Result</span>
