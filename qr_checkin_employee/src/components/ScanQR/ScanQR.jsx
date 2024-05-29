@@ -47,7 +47,7 @@ const ScanQR = () => {
         const attendanceHistory = response?.data?.message;
         const todayAttend = attendanceHistory.filter(item => item.date === todayISO);
         const forgotCheckAttendance = attendanceHistory.filter(item => item?.isAuto == true);
-        if (forgotCheckAttendance != "") {
+        if (forgotCheckAttendance != "" && forgotCheckAttendance[0]?.position === "Service" || forgotCheckAttendance != "" && forgotCheckAttendance[0]?.position === "Lito" || forgotCheckAttendance != "" && forgotCheckAttendance[0]?.position === "Autofahrer") {
           setAttendObj(forgotCheckAttendance[0]);
           setPositionForgot(forgotCheckAttendance[0]?.position);
           setAttendanceIdForgot(forgotCheckAttendance[0]?._id);
