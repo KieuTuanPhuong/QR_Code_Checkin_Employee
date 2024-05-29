@@ -22,7 +22,6 @@ const CarForm = ( props ) => {
     }
 
     const [carOptions, setCarOptions] = useState([]);
-    const [selectedCar, setSelectedCar] = useState();
     
     const navigate = useNavigate();
 
@@ -60,18 +59,33 @@ const CarForm = ( props ) => {
         setFormData(newFormData);
     };
 
+    const validateFormData = (data) => {
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            if (Number(data[key]) < 0) {
+              return false;
+            }
+          }
+        }
+        return true;
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        try {
-            const response = await axios.post(
-                `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/update-attendance?attendanceID=${ props.attendance_id }`,
-                formData,
-            );
-            alert("Successfully update!");
-            navigate('/schedule');
-        } catch (error) {
-            alert(error.response?.data?.message);
+        if (validateFormData(formData)) {
+            try {
+                const response = await axios.post(
+                    `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/update-attendance?attendanceID=${ props.attendance_id }`,
+                    formData,
+                );
+                alert("Successfully update!");
+                navigate('/schedule');
+            } catch (error) {
+                alert(error.response?.data?.message);
+            }
+        } else {
+            alert('Kilometer kann nicht 0 sein!');
         }
     };   
 
@@ -171,7 +185,6 @@ const CarForm = ( props ) => {
                     <a type="button" className="btn btn-secondary" href="/schedule">Close</a>
                     <button 
                         type="button" className="btn btn-secondary" 
-                        data-bs-dismiss="modal"
                         onClick={ handleSubmit }
                     >
                         Submit

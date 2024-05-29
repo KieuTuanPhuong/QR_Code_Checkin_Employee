@@ -11,14 +11,6 @@ const ServiceFormForgot = ( props ) => {
         auf_rechnung: '',
     });
 
-    const [formValid, setFormValid] = useState({
-        bar: false,
-        gesamt: false,
-        trinked_ec: false,
-        trink_geld: false,
-        auf_rechnung: false,
-    });
-
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         const newFormData = {
@@ -27,26 +19,51 @@ const ServiceFormForgot = ( props ) => {
         };
     
         setFormData(newFormData);
-        setFormValid({
-            ...formValid,
-            [name]: value !== '',
-        });
     };
+
     const navigate = useNavigate();
-    const isFormValid = Object.values(formValid).every((field) => field);
+
+    const validateFormData = (data) => {
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            if (Number(data[key]) < 0) {
+              return false;
+            }
+          }
+        }
+        return true;
+    };
+
+    const convertValuesToNumber = (obj) => {
+        let convertedObj = {};
+      
+        for (let key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            let value = obj[key].replace(',', '.');
+            convertedObj[key] = parseFloat(value);
+          }
+        }
+      
+        return convertedObj;
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const data = convertValuesToNumber(formData);
 
-        try {
-            const response = await axios.post(
-                `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/update-attendance?attendanceID=${ props.attendance_id_forgot }`,
-                formData,
-            );
-            alert("Successfully update!");
-            navigate('/schedule');
-        } catch (error) {
-            alert(error.response?.data?.message);
+        if (validateFormData(data)) {
+            try {
+                const response = await axios.post(
+                    `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/update-attendance?attendanceID=${ props.attendance_id_forgot }`,
+                    formData,
+                );
+                alert("Successfully update!");
+                navigate('/schedule');
+            } catch (error) {
+                alert(error.response?.data?.message);
+            }
+        } else {
+            alert('Der Wert kann nicht kleiner als 0 sein!');
         }
     };    
     
@@ -74,79 +91,81 @@ const ServiceFormForgot = ( props ) => {
 
                 {/* Body */}
                 <div className="modal-body">
-                    <div className="form-floating mb-3">
+                    <div className="mb-3">
+                        <label>BAR</label>
                         <input 
-                            type="number" placeholder="Enter bar"
-                            className={`form-control ${isFormValid ? '' : 'is-invalid'}`} 
+                            type="" placeholder="1234,00"
+                            className="form-control" 
                             name='bar'
                             value={ formData.bar }
                             onChange={ handleInputChange }
+                            min="0"
+                            pattern="[0-9]+([\.,][0-9]+)?" step="0.01"
                         />
-                        <label>BAR</label>
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
-                    <div className="input-group has-validation mb-3">
-                        <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
-                            <input   
-                                type="number" placeholder="Username"
-                                className={`form-control ${isFormValid ? '' : 'is-invalid'}`} 
-                                name='gesamt'
-                                value={ formData.gesamt }
-                                onChange={ handleInputChange }
-                            />
-                            <label >Gesamt</label>
-                        </div>
+                    <div className="mb-3">
+                        <label >Gesamt</label>
+                        <input   
+                            type="" placeholder="1234,00"
+                            className="form-control" 
+                            name='gesamt'
+                            value={ formData.gesamt }
+                            onChange={ handleInputChange }
+                            min="0"
+                            pattern="[0-9]+([\.,][0-9]+)?" step="0.01"
+                        />
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
-                    <div className="input-group mb-3">
-                        <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
-                            <input   
-                                type="number" placeholder="Username" 
-                                className={`form-control ${isFormValid ? '' : 'is-invalid'}`} 
-                                name='trinked_ec'
-                                value={ formData.trinked_ec }
-                                onChange={ handleInputChange }
-                            />
-                            <label>Trinkgeld EC</label>
-                        </div>
+                    <div className="mb-3">
+                        <label>Trinkgeld EC</label>
+                        <input   
+                            type="" placeholder="1234,00" 
+                            className="form-control" 
+                            name='trinked_ec'
+                            value={ formData.trinked_ec }
+                            onChange={ handleInputChange }
+                            min="0"
+                            pattern="[0-9]+([\.,][0-9]+)?" step="0.01"
+                        />
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
-                    <div className="input-group mb-3">
-                        <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
-                            <input   
-                                type="number" placeholder="Username" 
-                                className={`form-control ${isFormValid ? '' : 'is-invalid'}`} 
-                                name='trink_geld'
-                                value={ formData.trink_geld }
-                                onChange={ handleInputChange }
-                            />
-                            <label>Trinkgeld Gutschein</label>
-                        </div>
+                    <div className="mb-3">
+                        <label>Trinkgeld Gutschein</label>
+                        <input   
+                            type="" placeholder="1234,00" 
+                            className="form-control" 
+                            name='trink_geld'
+                            value={ formData.trink_geld }
+                            onChange={ handleInputChange }
+                            min="0"
+                            pattern="[0-9]+([\.,][0-9]+)?" step="0.01"
+                        />
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
-                    <div className="input-group mb-3">
-                        <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
-                            <input   
-                                type="number" placeholder="Username" 
-                                className={`form-control ${isFormValid ? '' : 'is-invalid'}`} 
-                                name='auf_rechnung'
-                                value={ formData.auf_rechnung }
-                                onChange={ handleInputChange }
-                            />
-                            <label>Auf Rechnung</label>
-                        </div>
+                    <div className="mb-3">
+                        <label>Auf Rechnung</label>
+                        <input   
+                            type="" placeholder="1234,00" 
+                            className="form-control" 
+                            name='auf_rechnung'
+                            value={ formData.auf_rechnung }
+                            onChange={ handleInputChange }
+                            min="0"
+                            pattern="[0-9]+([\.,][0-9]+)?" step="0.01"
+                        />
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
@@ -159,7 +178,6 @@ const ServiceFormForgot = ( props ) => {
                     <button 
                         type="button" className="btn btn-secondary" 
                         data-bs-dismiss="modal"
-                        disabled={ !isFormValid }
                         onClick={ handleSubmit }
                     >
                         Submit

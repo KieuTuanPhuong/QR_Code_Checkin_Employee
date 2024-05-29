@@ -11,43 +11,59 @@ const LitoForm = ( props ) => {
         gesamt_liegerando: '',
     });
 
-    const [formValid, setFormValid] = useState({
-        bar: false,
-        kredit_karte: false,
-        kassen_schniff: false,
-        gesamt_ligerbude: false,
-        gesamt_liegerando: false,
-    });
-
-    const handleInputChange = (event) => {
+    const handleInputChange = (event) => {        
         const { name, value } = event.target;
         const newFormData = {
             ...formData,
             [name]: value,
         };
-    
+
         setFormData(newFormData);
-        setFormValid({
-            ...formValid,
-            [name]: value !== '',
-        });
     };
 
     const navigate = useNavigate();
-    const isFormValid = Object.values(formValid).every((field) => field);
+
+    const validateFormData = (data) => {
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            if (Number(data[key]) < 0) {
+              return false;
+            }
+          }
+        }
+        return true;
+    };
+
+    const convertValuesToNumber = (obj) => {
+        let convertedObj = {};
+      
+        for (let key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            let value = obj[key].replace(',', '.');
+            convertedObj[key] = parseFloat(value);
+          }
+        }
+      
+        return convertedObj;
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const data = convertValuesToNumber(formData);
 
-        try {
-            const response = await axios.post(
-                `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/update-attendance?attendanceID=${ props.attendance_id }`,
-                formData,
-            );
-            alert("Successfully update!");
-            navigate('/schedule');
-        } catch (error) {
-            alert(error.response?.data?.message);
+        if (validateFormData(data)) {
+            try {
+                const response = await axios.post(
+                    `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/update-attendance?attendanceID=${ props.attendance_id }`,
+                    data,
+                );
+                alert("Successfully update!");
+                navigate('/schedule');
+            } catch (error) {
+                alert(error.response?.data?.message);
+            }
+        } else {
+            alert('Der Wert kann nicht kleiner als 0 sein!');
         }
     };    
     
@@ -68,86 +84,86 @@ const LitoForm = ( props ) => {
                 {/* Header */}
                 <div className="modal-content">
                 <div className="modal-header d-flex flex-column align-items-start">
-                    {/* <h1 className="modal-title" id="litoFormLabel">Department</h1> */}
                     <h3 className="modal-title fs-5">Lito</h3>
-                    {/* <h3><span className="badge text-bg-success">Time</span></h3> */}
                 </div>
 
                 {/* Body */}
                 <div className="modal-body">
-                    <div className="form-floating mb-3">
+                    <div className=" mb-3">
+                        <label>BAR</label>
                         <input 
-                            type="number" placeholder="Enter bar"
-                            className={`form-control ${isFormValid ? '' : 'is-invalid'}`} 
+                            type="" placeholder="1234,00" 
+                            className="form-control" 
                             name='bar'
                             value={ formData.bar }
                             onChange={ handleInputChange }
+                            min="0"
+                            pattern="[0-9]+([\.,][0-9]+)?" step="0.01"
                         />
-                        <label>BAR</label>
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
-                    <div className="input-group has-validation mb-3">
-                        <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
-                            <input   
-                                type="number" placeholder="Username"
-                                className={`form-control ${isFormValid ? '' : 'is-invalid'}`} 
-                                name='kredit_karte'
-                                value={ formData.kredit_karte }
-                                onChange={ handleInputChange }
-                            />
-                            <label>Kreditkarte</label>
-                        </div>
+                    <div className="mb-3">
+                        <label>Kreditkarte</label>
+                        <input
+                            type="" placeholder="1234,00" 
+                            className="form-control" 
+                            name='kredit_karte'
+                            value={ formData.kredit_karte }
+                            onChange={ handleInputChange }
+                            min="0"
+                            pattern="[0-9]+([\.,][0-9]+)?" step="0.01"
+                        />
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
-                    <div className="input-group mb-3">
-                        <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
-                            <input   
-                                type="number" placeholder="Username" 
-                                className={`form-control ${isFormValid ? '' : 'is-invalid'}`} 
-                                name='kassen_schniff'
-                                value={ formData.kassen_schniff }
-                                onChange={ handleInputChange }
-                            />
-                            <label>Kassenschnitt</label>
-                        </div>
+                    <div className="mb-3">                        
+                        <label>Kassenschnitt</label>
+                        <input   
+                            type="" placeholder="1234,00" 
+                            className="form-control" 
+                            name='kassen_schniff'
+                            value={ formData.kassen_schniff }
+                            onChange={ handleInputChange }
+                            min="0"
+                            pattern="[0-9]+([\.,][0-9]+)?" step="0.01"
+                        />
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
-                    <div className="input-group mb-3">
-                        <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
-                            <input   
-                                type="number" placeholder="Username" 
-                                className={`form-control ${isFormValid ? '' : 'is-invalid'}`} 
-                                name='gesamt_ligerbude'
-                                value={ formData.gesamt_ligerbude }
-                                onChange={ handleInputChange }
-                            />
-                            <label>Gesamt Liferbude</label>
-                        </div>
+                    <div className="mb-3">
+                        <label>Gesamt Liferbude</label>
+                        <input   
+                            type="" placeholder="1234,00" 
+                            className="form-control" 
+                            name='gesamt_ligerbude'
+                            value={ formData.gesamt_ligerbude }
+                            onChange={ handleInputChange }
+                            min="0"
+                            pattern="[0-9]+([\.,][0-9]+)?" step="0.01"
+                        />
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
 
-                    <div className="input-group mb-3">
-                        <div className={`form-floating ${isFormValid ? '' : 'is-invalid'}`}>
-                            <input   
-                                type="number" placeholder="Username" 
-                                className={`form-control ${isFormValid ? '' : 'is-invalid'}`} 
-                                name='gesamt_liegerando'
-                                value={ formData.gesamt_liegerando }
-                                onChange={ handleInputChange }
-                            />
-                            <label>Gesamt Liferando</label>
-                        </div>
+                    <div className="mb-3">                        
+                        <label>Gesamt Liferando</label>
+                        <input   
+                            type="" placeholder="1234,00" 
+                            className="form-control" 
+                            name='gesamt_liegerando'
+                            value={ formData.gesamt_liegerando }
+                            onChange={ handleInputChange }
+                            min="0"
+                            pattern="[0-9]+([\.,][0-9]+)?" step="0.01"
+                        />
                         <div className="invalid-feedback">
                             This field is required.
                         </div>
@@ -159,8 +175,6 @@ const LitoForm = ( props ) => {
                     <a type="button" className="btn btn-secondary" href="/schedule">Close</a>
                     <button 
                         type="button" className="btn btn-secondary" 
-                        data-bs-dismiss="modal"
-                        disabled={ !isFormValid }
                         onClick={ handleSubmit }                    
                     >
                         Submit
