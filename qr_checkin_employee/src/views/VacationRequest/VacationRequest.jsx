@@ -18,12 +18,14 @@ const VacationRequest = () => {
     const [endDate, setEndDate] = useState(new Date());
     const [requestImg, setRequestImg] = useState()
 
-    const formData = {
-        request_dayOff_start: format(startDate, 'MM/dd/yyyy'),
-        request_dayOff_end: format(endDate, 'MM/dd/yyyy'),
-        request_content: type,
-        image: requestImg,
-    };
+    const getLocaleDate = (inputDate) => {
+        const year = inputDate.getFullYear();
+        const month = inputDate.getMonth() + 1;
+        const day = inputDate.getDate();
+        const localeDate = `${month}/${day}/${year}`;
+
+        return localeDate;
+    }
 
     const {
         user: { id: userID }
@@ -36,6 +38,12 @@ const VacationRequest = () => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
+        const formData = new FormData();
+        formData.append('request_dayOff_start', getLocaleDate(startDate))
+        formData.append('request_dayOff_end', getLocaleDate(endDate))
+        formData.append('request_content', type)
+        formData.append('image', requestImg);
+    
         setIsLoading(true);
         try {
             const response = await axios.post(
