@@ -91,7 +91,7 @@ const VacationRequest = () => {
                         name="request_content" id="holidayOption"
                         autoComplete="off"
                         value="Normal"
-                        onChange={() => setType("Holiday")}
+                        onChange={() => setType("Normal")}
                     />
                     <label className="btn btn-outline-primary" htmlFor="holidayOption">Urlaub</label>
 
