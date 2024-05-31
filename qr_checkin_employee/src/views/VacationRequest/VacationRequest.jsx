@@ -90,7 +90,7 @@ const VacationRequest = () => {
                         type="radio" className="btn-check"
                         name="request_content" id="holidayOption"
                         autoComplete="off"
-                        value="Holiday"
+                        value="Normal"
                         onChange={() => setType("Holiday")}
                     />
                     <label className="btn btn-outline-primary" htmlFor="holidayOption">Urlaub</label>
