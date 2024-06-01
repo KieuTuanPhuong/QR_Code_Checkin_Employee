@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 import RequestLog from "./RequestLog";
+import { de } from "date-fns/locale";
 
 const RequestHistory = () => {
     const [requestLogs, setRequestLogs] = useState([]);
@@ -38,6 +39,16 @@ const RequestHistory = () => {
         }
     }
 
+    const getLocaleDate = (inputDate) => {
+        const dateObj = new Date(inputDate);
+        const year = dateObj.getFullYear();
+        const month = dateObj.getMonth() + 1;
+        const day = dateObj.getDate();
+        const localeDate = `${month}/${day}/${year}`;
+
+        return localeDate;
+    }
+
     const requestList = requestLogs.map((request) => {
         const lastUpdated = Date.parse(request?.updatedAt);
         const status = request?.answer_status;
@@ -46,10 +57,10 @@ const RequestHistory = () => {
             return (
                 <RequestLog 
                     request={request} key={request._id} 
-                    createdAt={request.createdAt.slice(0, 10)}
+                    createdAt={getLocaleDate(request.createdAt)}
                     answer_status={request.answer_status}
-                    request_dayOff_start={request.request_dayOff_start.slice(0, 10)}
-                    request_dayOff_end={request.request_dayOff_end.slice(0, 10)}
+                    request_dayOff_start={getLocaleDate(request.request_dayOff_start)}
+                    request_dayOff_end={getLocaleDate(request.request_dayOff_end)}
                     request_content={request.request_content}
                 />
             );
@@ -57,10 +68,10 @@ const RequestHistory = () => {
             return (
                 <RequestLog 
                     request={request} key={request._id} 
-                    createdAt={request.createdAt.slice(0, 10)}
+                    createdAt={getLocaleDate(request.createdAt)}
                     answer_status={request.answer_status}
-                    request_dayOff_start={request.request_dayOff_start.slice(0, 10)}
-                    request_dayOff_end={request.request_dayOff_end.slice(0, 10)}
+                    request_dayOff_start={getLocaleDate(request.request_dayOff_start)}
+                    request_dayOff_end={getLocaleDate(request.request_dayOff_end)}
                     request_content={request.request_content}
                 />
             );
