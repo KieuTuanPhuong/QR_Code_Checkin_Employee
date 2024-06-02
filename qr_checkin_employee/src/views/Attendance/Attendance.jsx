@@ -150,7 +150,7 @@ const Attendance = (props) => {
         <>
             <Navigation />
             <div className="flex flex-col justify-center items-center w-full gap-4 font-Changa text-textColor mt-3">
-                <h2 className="text-2xl font-bold">Zeitplan Kalender</h2>
+                <h2 className="text-2xl font-bold">Attendance History</h2>
                 {selectedYear && (
                     <Calendar
                         onChange={handleMonthChange}
