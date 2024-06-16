@@ -39,10 +39,15 @@ const VacationRequest = () => {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData();
-        formData.append('request_dayOff_start', getLocaleDate(startDate))
-        formData.append('request_dayOff_end', getLocaleDate(endDate))
-        formData.append('request_content', type)
-        formData.append('image', requestImg);
+        formData.append('request_dayOff_start', getLocaleDate(startDate));
+        formData.append('request_dayOff_end', getLocaleDate(endDate));
+        formData.append('request_content', type);
+        if (requestImg !== undefined) {
+            formData.append('image', requestImg);
+        } else {
+            alert("Image cannot be empty!");
+            return
+        }
     
         setIsLoading(true);
         try {

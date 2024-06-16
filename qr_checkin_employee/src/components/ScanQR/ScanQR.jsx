@@ -87,7 +87,13 @@ const ScanQR = () => {
               );
 
               if (res.data.success) {
-                alert("Attendance checked successfully!");
+                if (res.data.message.shift_info.time_slot.check_out) {
+                  const status = res.data.message.shift_info.time_slot.check_out_status;
+                  alert(`Check Out Successfully!\nStatus: ${status}`);
+                } else {
+                  const status = res.data.message.shift_info.time_slot.check_in_status;
+                  alert(`Check In Successfully!\nStatus: ${status}`);
+                }
                 if (res?.data?.message?.position === 'Autofahrer') {
                   setPosition('Autofahrer');
                   setAttendanceID(res?.data?.message?._id);
