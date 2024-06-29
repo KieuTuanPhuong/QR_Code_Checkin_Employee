@@ -45,14 +45,16 @@ const VacationRequest = () => {
         if (requestImg !== undefined) {
             formData.append('image', requestImg);
         } else {
-            alert("Image cannot be empty!");
-            return
+            if (type === 'Sick day') {
+                alert("Image cannot be empty!");
+                return
+            }
         }
-    
+
         setIsLoading(true);
         try {
             const response = await axios.post(
-                baseUrl + `/api/employee/create-request?employeeID=${userID}&employeeName=${userObject.name}`,
+                `https://qrcodecheckin-d350fcfb1cb9.herokuapp.com/api/employee/create-request?employeeID=${userID}&employeeName=${userObject.name}`,
                 formData,
             );
             alert("Successfully sent the request!");
@@ -92,10 +94,10 @@ const VacationRequest = () => {
                     />
                 </div>
 
-                <div className="mb-3">
+                {type === "Sick day" && (<div className="mb-3">
                     <label htmlFor="formFile" className="form-label">Image</label>
-                    <input className="form-control requestInput" type="file" id="formFile" onChange={(img) => setRequestImg(img.target.files[0])}/>
-                </div>
+                    <input className="form-control requestInput" type="file" id="formFile" onChange={(img) => setRequestImg(img.target.files[0])} />
+                </div>)}
 
                 <label className="form-label">Type</label>
                 <div className="mb-3">
