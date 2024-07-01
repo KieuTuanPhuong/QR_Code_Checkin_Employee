@@ -85,7 +85,7 @@ const ServiceFormForgot = ( props ) => {
                 <div className="modal-content">
                 <div className="modal-header d-flex flex-column align-items-start">
                     <h1 className="modal-title" id="litoFormLabel">Filiale { props.department }</h1>
-                    <h3 className="modal-title fs-5">Lito</h3>
+                    <h3 className="modal-title fs-5">Service</h3>
                     {/* <h3><span className="badge text-bg-success">{ props.time }</span></h3> */}
                 </div>
 
