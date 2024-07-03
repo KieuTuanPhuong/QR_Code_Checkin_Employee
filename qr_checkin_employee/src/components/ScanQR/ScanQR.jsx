@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import QrScanner from "react-qr-scanner";
 import axios from "axios";
 
@@ -46,8 +46,8 @@ const ScanQR = () => {
   
         const attendanceHistory = response?.data?.message;
         const todayAttend = attendanceHistory.filter(item => item.date === todayISO);
-        const forgotCheckAttendance = attendanceHistory.filter(item => item?.isAuto == true);
-        if (forgotCheckAttendance != "" && forgotCheckAttendance[0]?.position === "Service" || forgotCheckAttendance != "" && forgotCheckAttendance[0]?.position === "Lito" || forgotCheckAttendance != "" && forgotCheckAttendance[0]?.position === "Autofahrer") {
+        const forgotCheckAttendance = attendanceHistory.filter(item => item?.isAuto === true);
+        if ((forgotCheckAttendance.length !== 0) && (forgotCheckAttendance[0]?.position === "Service" || forgotCheckAttendance[0]?.position === "Lito" || forgotCheckAttendance[0]?.position === "Autofahrer")) {
           setAttendObj(forgotCheckAttendance[0]);
           setPositionForgot(forgotCheckAttendance[0]?.position);
           setAttendanceIdForgot(forgotCheckAttendance[0]?._id);
@@ -62,76 +62,78 @@ const ScanQR = () => {
     }
 
     getAttendanceHistory();
-  }, []);
+  }, [baseUrl, userObject.id, userObject.name]);
 
+  const handleScan = useCallback(
+    async (data) => {
+      if (data && !isAttendanceChecked) {
+        try {
+          setAttendanceChecked(true);
 
-  const handleScan = async (data) => {
-    if (data && !isAttendanceChecked) {
-      try {
-        setAttendanceChecked(true);
+          const qrDataParts = data.text.split(' - ');
+          if (qrDataParts.length === 2) {
+            const departmentFromQR = qrDataParts[0];
+            const timestampFromQR = new Date(qrDataParts[1]);
+            const currentTimestamp = new Date();
 
-        const qrDataParts = data.text.split(' - ');
-        if (qrDataParts.length === 2) {
-          const departmentFromQR = qrDataParts[0];
-          const timestampFromQR = new Date(qrDataParts[1]);
-          const currentTimestamp = new Date();
+            const expectedQRDataArray = department.map(dept => `QR code for department ${dept.name}`);
+            if (expectedQRDataArray.includes(departmentFromQR)) {
+              const timeDifference = currentTimestamp - timestampFromQR;
+              if (timeDifference >= 0 && timeDifference <= 20000) {
+                const res = await axios.post(
+                  `${baseUrl}/api/employee/check-attendance`,
+                  { employeeID: userID, employeeName: userObject.name },
+                  { withCredentials: true }
+                );
 
-          const expectedQRDataArray = department.map(dept => `QR code for department ${dept.name}`);
-          if (expectedQRDataArray.includes(departmentFromQR)) {
-            const timeDifference = currentTimestamp - timestampFromQR;
-            if (timeDifference >= 0 && timeDifference <= 20000) {
-              const res = await axios.post(
-                `${baseUrl}/api/employee/check-attendance`,
-                { employeeID: userID, employeeName: userObject.name },
-                { withCredentials: true }
-              );
-
-              if (res.data.success) {
-                if (res.data.message.shift_info.time_slot.check_out) {
-                  const status = res.data.message.shift_info.time_slot.check_out_status;
-                  alert(`Check Out Successfully!\nStatus: ${status}`);
-                } else {
-                  const status = res.data.message.shift_info.time_slot.check_in_status;
-                  alert(`Check In Successfully!\nStatus: ${status}`);
-                }
-                if (res?.data?.message?.position === 'Autofahrer') {
-                  setPosition('Autofahrer');
-                  setAttendanceID(res?.data?.message?._id);
-                  setDepartmentCar(res?.data?.message?.department_name);
-                  setCameraEnabled(false);
-                }
-                if (res?.data?.message?.shift_info?.time_slot?.check_out) {
-                  setIsCheckout(res?.data?.message?.shift_info?.time_slot?.check_out);
-                  if (res?.data?.message?.position === 'Lito') {
-                    setPosition('Lito');
+                if (res.data.success) {
+                  if (res.data.message.shift_info.time_slot.check_out) {
+                    const status = res.data.message.shift_info.time_slot.check_out_status;
+                    alert(`Check Out Successfully!\nStatus: ${status}`);
+                  } else {
+                    const status = res.data.message.shift_info.time_slot.check_in_status;
+                    alert(`Check In Successfully!\nStatus: ${status}`);
+                  }
+                  if (res?.data?.message?.position === 'Autofahrer') {
+                    setPosition('Autofahrer');
                     setAttendanceID(res?.data?.message?._id);
-                    setCameraEnabled(false);
-                  } else if (res?.data?.message?.position === 'Service') {
-                    setPosition('Service');
-                    setAttendanceID(res?.data?.message?._id);
+                    setDepartmentCar(res?.data?.message?.department_name);
                     setCameraEnabled(false);
                   }
+                  if (res?.data?.message?.shift_info?.time_slot?.check_out) {
+                    setIsCheckout(res?.data?.message?.shift_info?.time_slot?.check_out);
+                    if (res?.data?.message?.position === 'Lito') {
+                      setPosition('Lito');
+                      setAttendanceID(res?.data?.message?._id);
+                      setCameraEnabled(false);
+                    } else if (res?.data?.message?.position === 'Service') {
+                      setPosition('Service');
+                      setAttendanceID(res?.data?.message?._id);
+                      setCameraEnabled(false);
+                    }
+                  }
+                } else {
+                  alert("Expired QR code. Please generate a new QR code.");
                 }
               } else {
                 alert("Expired QR code. Please generate a new QR code.");
               }
             } else {
-              alert("Expired QR code. Please generate a new QR code.");
+              alert("Invalid QR code. Please scan the correct QR code.");
             }
           } else {
-            alert("Invalid QR code. Please scan the correct QR code.");
+            alert("Invalid QR code format.");
           }
-        } else {
-          alert("Invalid QR code format.");
+        } catch (error) {
+          alert("An error occurred: " + error.response?.data?.message);
+        } finally {
+          setAttendanceChecked(false);
+          // nav("/attendance-history")
         }
-      } catch (error) {
-        alert("An error occurred:"+ error.response?.data?.message);
-      } finally {
-        setAttendanceChecked(false);
-        // nav("/attendance-history")
       }
-    }
-  };
+    },
+    [isAttendanceChecked, baseUrl, department, userID, userObject.name]
+  );
 
   const handleError = (error) => {
     console.error("QR code scanning error:", error);
