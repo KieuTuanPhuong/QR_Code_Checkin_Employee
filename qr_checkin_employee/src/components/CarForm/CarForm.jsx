@@ -10,7 +10,7 @@ const CarForm = ( props ) => {
             const newFormData = {
                 ...formData,
                 car_name: 'PRIVATE',
-                car_type: private
+                car_type: 'private'
             };
             setFormData(newFormData);
             // console.log("th1")
