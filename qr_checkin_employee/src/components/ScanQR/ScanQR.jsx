@@ -82,7 +82,7 @@ const ScanQR = () => {
               if (timeDifference >= 0 && timeDifference <= 20000) {
                 const res = await axios.post(
                   `${baseUrl}/api/employee/check-attendance`,
-                  { employeeID: userID, employeeName: userObject.name, departmentName: departmentFromQR },
+                  { employeeID: userID, employeeName: userObject.name, departmentName: departmentFromQR.slice(23) },
                   { withCredentials: true }
                 );
 
